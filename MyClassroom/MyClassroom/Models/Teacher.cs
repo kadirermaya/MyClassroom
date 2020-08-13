@@ -11,7 +11,7 @@ namespace MyClassroom.Models
     public class Teacher
     {
         [Key]
-        public int teacherID { get; set; }
+        public int TeacherID { get; set; }
         [ForeignKey("IdentityUser")]
         public string IdentityUserId { get; set; }
         public IdentityUser IdentityUser { get; set; }
