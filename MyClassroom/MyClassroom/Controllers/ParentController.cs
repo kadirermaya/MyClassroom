@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -10,20 +11,27 @@ using MyClassroom.Models;
 
 namespace MyClassroom.Controllers
 {
-    public class ParentsController : Controller
+    public class ParentController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public ParentsController(ApplicationDbContext context)
+        public ParentController(ApplicationDbContext context)
         {
             _context = context;
         }
 
         // GET: Parents
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var applicationDbContext = _context.Parent.Include(p => p.IdentityUser);
-            return View(await applicationDbContext.ToListAsync());
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var parent = _context.Parents.Where(c => c.IdentityUserId == userId).FirstOrDefault();
+
+            if (parent == null)
+            {
+                return RedirectToAction("Create");
+
+            }
+            return View(parent);
         }
 
         // GET: Parents/Details/5
@@ -34,7 +42,7 @@ namespace MyClassroom.Controllers
                 return NotFound();
             }
 
-            var parent = await _context.Parent
+            var parent = await _context.Parents
                 .Include(p => p.IdentityUser)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (parent == null)
@@ -48,7 +56,6 @@ namespace MyClassroom.Controllers
         // GET: Parents/Create
         public IActionResult Create()
         {
-            ViewData["IdentityUserId"] = new SelectList(_context.Users, "Id", "Id");
             return View();
         }
 
@@ -57,16 +64,14 @@ namespace MyClassroom.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,IdentityUserId,FirstName,LastName")] Parent parent)
+        public IActionResult Create([Bind("Id,IdentityUserId,FirstName,LastName")] Parent parent)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(parent);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["IdentityUserId"] = new SelectList(_context.Users, "Id", "Id", parent.IdentityUserId);
-            return View(parent);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            parent.IdentityUserId = userId;
+
+            _context.Add(parent);
+            _context.SaveChanges();
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Parents/Edit/5
@@ -77,7 +82,7 @@ namespace MyClassroom.Controllers
                 return NotFound();
             }
 
-            var parent = await _context.Parent.FindAsync(id);
+            var parent = await _context.Parents.FindAsync(id);
             if (parent == null)
             {
                 return NotFound();
@@ -130,7 +135,7 @@ namespace MyClassroom.Controllers
                 return NotFound();
             }
 
-            var parent = await _context.Parent
+            var parent = await _context.Parents
                 .Include(p => p.IdentityUser)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (parent == null)
@@ -146,15 +151,15 @@ namespace MyClassroom.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var parent = await _context.Parent.FindAsync(id);
-            _context.Parent.Remove(parent);
+            var parent = await _context.Parents.FindAsync(id);
+            _context.Parents.Remove(parent);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool ParentExists(int id)
         {
-            return _context.Parent.Any(e => e.Id == id);
+            return _context.Parents.Any(e => e.Id == id);
         }
     }
 }

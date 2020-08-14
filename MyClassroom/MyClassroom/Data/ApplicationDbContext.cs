@@ -23,6 +23,11 @@ namespace MyClassroom.Data
             .HasData(
             new IdentityRole
             {
+            Name = "Admin",
+            NormalizedName = "ADMIN"
+            },
+            new IdentityRole
+            {
                 Name = "Teacher",
                 NormalizedName = "TEACHER"
             },
@@ -39,10 +44,13 @@ namespace MyClassroom.Data
             ) ;
         }
 
-        public DbSet<MyClassroom.Models.Teacher> Teacher { get; set; }
+        public DbSet<Models.Teacher> Teachers { get; set; }
+        public DbSet<Models.Parent> Parents { get; set; }
+        public DbSet<Models.Student> Students { get; set; }
+        public DbSet<Models.Homework> Homeworks { get; set; }
+        public DbSet<Models.Points> Points { get; set; }
+        public DbSet<MyClassroom.Models.DailyNote> DailyNotes { get; set; }
 
-        public DbSet<MyClassroom.Models.Parent> Parent { get; set; }
 
-        public DbSet<MyClassroom.Models.Student> Student { get; set; }
     }
 }

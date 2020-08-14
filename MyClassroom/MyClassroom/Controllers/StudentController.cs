@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -10,20 +11,27 @@ using MyClassroom.Models;
 
 namespace MyClassroom.Controllers
 {
-    public class StudentsController : Controller
+    public class StudentController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public StudentsController(ApplicationDbContext context)
+        public StudentController(ApplicationDbContext context)
         {
             _context = context;
         }
 
         // GET: Students
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var applicationDbContext = _context.Student.Include(s => s.IdentityUser);
-            return View(await applicationDbContext.ToListAsync());
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var student = _context.Students.Where(c => c.IdentityUserId == userId).FirstOrDefault();
+
+            if (student == null)
+            {
+                return RedirectToAction("Create");
+
+            }
+            return View(student);
         }
 
         // GET: Students/Details/5
@@ -34,9 +42,7 @@ namespace MyClassroom.Controllers
                 return NotFound();
             }
 
-            var student = await _context.Student
-                .Include(s => s.IdentityUser)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var student = await _context.Students.Include(s => s.IdentityUser).FirstOrDefaultAsync(m => m.Id == id);
             if (student == null)
             {
                 return NotFound();
@@ -48,7 +54,6 @@ namespace MyClassroom.Controllers
         // GET: Students/Create
         public IActionResult Create()
         {
-            ViewData["IdentityUserId"] = new SelectList(_context.Users, "Id", "Id");
             return View();
         }
 
@@ -57,16 +62,14 @@ namespace MyClassroom.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,IdentityUserId,ClassId,ParentId,FirstName,LastName")] Student student)
+        public IActionResult Create([Bind("Id,IdentityUserId,ClassId,ParentId,FirstName,LastName")] Student student)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(student);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["IdentityUserId"] = new SelectList(_context.Users, "Id", "Id", student.IdentityUserId);
-            return View(student);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            student.IdentityUserId = userId;
+
+            _context.Add(student);
+            _context.SaveChanges();
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Students/Edit/5
@@ -77,7 +80,7 @@ namespace MyClassroom.Controllers
                 return NotFound();
             }
 
-            var student = await _context.Student.FindAsync(id);
+            var student = await _context.Students.FindAsync(id);
             if (student == null)
             {
                 return NotFound();
@@ -130,7 +133,7 @@ namespace MyClassroom.Controllers
                 return NotFound();
             }
 
-            var student = await _context.Student
+            var student = await _context.Students
                 .Include(s => s.IdentityUser)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (student == null)
@@ -146,15 +149,15 @@ namespace MyClassroom.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var student = await _context.Student.FindAsync(id);
-            _context.Student.Remove(student);
+            var student = await _context.Students.FindAsync(id);
+            _context.Students.Remove(student);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool StudentExists(int id)
         {
-            return _context.Student.Any(e => e.Id == id);
+            return _context.Students.Any(e => e.Id == id);
         }
     }
 }
