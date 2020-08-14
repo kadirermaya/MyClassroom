@@ -11,12 +11,14 @@ namespace MyClassroom.Models
     public class Classroom
     {
         [Key]
-        public int ClassroomId { get; set; }
-        public int ClassName { get; set; }
+        public int Id { get; set; }
         [ForeignKey("teacherId")]
         public int TeacherID { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
+        public int Name { get; set; }
+        public List<Student> Students {get; set;}
+        public List<Homework> Homeworks { get; set; }
+
+
 
 
     }

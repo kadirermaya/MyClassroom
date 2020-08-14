@@ -7,15 +7,15 @@ using System.Threading.Tasks;
 
 namespace MyClassroom.Models
 {
-    public class Points
+    public class Homework
     {
         [Key]
         public int Id { get; set; }
-        [ForeignKey("StudentId")]
-        public int StudentId  { get; set; }
-        [ForeignKey("TeacherId")]
-        public int TeacherId { get; set; }
-        public string Behavior { get; set; }
-        public DateTime Time { get; set; }
+        [ForeignKey("ClassId")]
+        public int ClassId { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public DateTime Date { get; set; }
+
     }
 }
