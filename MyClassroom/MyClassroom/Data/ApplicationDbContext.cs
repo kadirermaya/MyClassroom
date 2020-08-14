@@ -4,6 +4,7 @@ using System.Text;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using MyClassroom.Models;
 
 namespace MyClassroom.Data
 {
@@ -37,5 +38,11 @@ namespace MyClassroom.Data
             }
             ) ;
         }
+
+        public DbSet<MyClassroom.Models.Teacher> Teacher { get; set; }
+
+        public DbSet<MyClassroom.Models.Parent> Parent { get; set; }
+
+        public DbSet<MyClassroom.Models.Student> Student { get; set; }
     }
 }
