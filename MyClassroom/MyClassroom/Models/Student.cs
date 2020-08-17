@@ -17,8 +17,8 @@ namespace MyClassroom.Models
         public IdentityUser IdentityUser { get; set; }
         [ForeignKey("ClassId")]
         public int ClassId { get; set; }
-        [ForeignKey("TeacherId")]
-        public int ParentId { get; set; }
+        [ForeignKey("ParentId")]
+        public int? ParentId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public List<Attendance> Attendances { get; set; }

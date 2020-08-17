@@ -38,21 +38,15 @@ namespace MyClassroom.Controllers
             return View(viewmodel);
         }
 
-        public ActionResult SelectClassroom()
+        public ActionResult SelectedClassroom(int? id)
         {
-            TeacherIndexViewModel viewmodel = new TeacherIndexViewModel();
+            TeacherClassroomViewModel classroom = new TeacherClassroomViewModel();
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            viewmodel.Teacher = _context.Teachers.Where(t => t.IdentityUserId == userId).FirstOrDefault();
-            viewmodel.MyClassrooms = _context.Classroom.Where(c => c.TeacherID == viewmodel.Teacher.Id).ToList();
-
-
-            if (viewmodel.Teacher == null)
-            {
-                return RedirectToAction("Create");
-
-            }
-
-            return View(viewmodel);
+            classroom.Teacher = _context.Teachers.Where(t => t.IdentityUserId == userId).FirstOrDefault();
+            classroom.Students = _context.Students.Where(c => c.ClassId == id).ToList();
+            classroom.Classroom = _context.Classroom.Where(cs => cs.Id == id).FirstOrDefault();
+            
+            return View(classroom);
         }
 
         // GET: Teachers/Details/5
@@ -71,8 +65,27 @@ namespace MyClassroom.Controllers
 
             return View(teacher);
         }
+        public IActionResult AddStudent()
+        {
+            return View();
+        }
 
-        // GET: Teachers/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult AddStudent(int id)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var addedStudent = _context.Students.Where(c => c.IdentityUserId == userId).FirstOrDefault();
+
+
+
+            _context.Students.Add(addedStudent);
+            _context.SaveChanges();
+            return RedirectToAction(nameof(SelectedClassroom));
+
+        }
+
+        //GET: Teachers/Create
         public IActionResult Create()
         {
             return View();
@@ -96,7 +109,6 @@ namespace MyClassroom.Controllers
             return RedirectToAction(nameof(Index));
             
         }
-
         public IActionResult CreateClassroom()
         {
             return View();

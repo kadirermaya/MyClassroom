@@ -64,13 +64,15 @@ namespace MyClassroom.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create([Bind("Id,IdentityUserId,FirstName,LastName")] Parent parent)
+        public IActionResult Create([Bind("Id,IdentityUserId,FirstName,LastName")] Parent parent, string StudentFirstName, string StudentLastName)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             parent.IdentityUserId = userId;
 
             _context.Add(parent);
             _context.SaveChanges();
+
+            UpdateParentId(StudentFirstName, StudentLastName, parent.Id);
             return RedirectToAction(nameof(Index));
         }
 
@@ -160,6 +162,14 @@ namespace MyClassroom.Controllers
         private bool ParentExists(int id)
         {
             return _context.Parents.Any(e => e.Id == id);
+        }
+
+        public void UpdateParentId(string firstName, string lastName, int ParentId)
+        {
+            var student = _context.Students.Where(s => s.FirstName == firstName && s.LastName == lastName).FirstOrDefault();
+            student.ParentId = ParentId;
+            _context.Students.Update(student);
+            _context.SaveChanges();
         }
     }
 }

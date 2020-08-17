@@ -1,0 +1,56 @@
+﻿@model MyClassroom.Models.TeacherClassroomViewModel
+
+@{
+    ViewData["Title"] = "SelectedClassroom";
+}
+<br />
+<h1>@Model.Classroom.Name</h1>
+<br />
+
+
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+    Add Student
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form asp-action="AddStudent" method="post" enctype="multipart/form-data" asp-controller="TeacherController">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="modal-body mx-3">
+                        <div class="md-form mb-5">
+                            <i class="fas fa-envelope prefix grey-text"></i>
+                            <input type="text" id="defaultForm-email" class="form-control validate" placeholder="Student First Name">
+                        </div>
+                        <div class="md-form mb-5">
+                            <i class="fas fa-envelope prefix grey-text"></i>
+                            <input type="text" id="defaultForm-email" class="form-control validate" placeholder="Student Last Name">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button id="btnSave" type="submit" class="btn btn-primary" asp-action="AddStudent" asp-route-id="@Model.Classroom.Id">Save changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="row">
+    @foreach (var item in Model.Students)
+    {
+        <a type="button" class="btn btn-primary btn-lg butt" asp-action="" asp-route-id="@item.Id">@item.FirstName @item.LastName</a>
+
+    }
+</div>

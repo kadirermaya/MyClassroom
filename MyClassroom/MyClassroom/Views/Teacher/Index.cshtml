@@ -9,9 +9,10 @@
         margin-left: 10px;
         margin-bottom: 10px;
     }
-    .butt{
-        width : 200px;
+    .butt {
+        width: 200px;
         height: 200px;
+      
     }
 </style>
     <br />
@@ -24,11 +25,11 @@
 </div>
 <br />
 <div class="row">
-    @foreach(var item in Model.MyClassrooms)
+    @foreach (var item in Model.MyClassrooms)
     {
-        <button type="button" class="btn btn-primary btn-lg butt"onclick="location.href='@Url.Action("SelectClassroom", "Teacher")'">@item.Name</button>
+        <a type="button" class="btn btn-primary btn-lg butt" asp-action="SelectedClassroom" asp-route-id="@item.Id">@item.Name</a>
+    
     }
-
 </div>
 
 

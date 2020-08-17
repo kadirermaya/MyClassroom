@@ -232,7 +232,7 @@ namespace MyClassroom.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     IdentityUserId = table.Column<string>(nullable: true),
                     ClassId = table.Column<int>(nullable: false),
-                    ParentId = table.Column<int>(nullable: false),
+                    ParentId = table.Column<int>(nullable: true),
                     FirstName = table.Column<string>(nullable: true),
                     LastName = table.Column<string>(nullable: true),
                     ClassroomId = table.Column<int>(nullable: true)
@@ -331,10 +331,10 @@ namespace MyClassroom.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "b0e3a26d-f395-45fb-a1de-3cde2410bdc0", "9db0fd31-f543-4730-8746-9f0ffec18421", "Admin", "ADMIN" },
-                    { "e3f005f7-9c30-4dd2-89c4-e1a01d1be288", "80744e8e-e823-4071-9199-42d2e2a6dd48", "Teacher", "TEACHER" },
-                    { "6bc4cd62-c4e2-46a9-a3b3-ede8481814e4", "4b103012-92ea-46a2-a7f9-21cc4caa4ab8", "Parent", "PARENT" },
-                    { "008866d3-ebe4-491d-949c-57fc394575c0", "747c83fb-7363-4d31-893c-66da23a56d2d", "Student", "STUDENT" }
+                    { "6f7ee99c-2d54-4cd2-9f21-6bcfc43f0b4e", "d55da1fb-0d78-41b1-b48c-e731aeeefb0f", "Admin", "ADMIN" },
+                    { "f20df566-4000-4ca9-995f-02eb65a1f025", "81f1d8f8-d71c-48b9-add0-02478e9804cc", "Teacher", "TEACHER" },
+                    { "c9e15dd4-1037-4fa1-b66b-15fbf8b44e15", "21008b8f-bb91-4d82-81f7-528a2ea1f47b", "Parent", "PARENT" },
+                    { "dee350eb-08b0-43c4-9baf-8b31f8591c6a", "2efc83c9-27cd-495a-a556-6e76a2735bee", "Student", "STUDENT" }
                 });
 
             migrationBuilder.CreateIndex(
