@@ -10,8 +10,8 @@ using MyClassroom.Data;
 namespace MyClassroom.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200814185551_initial")]
-    partial class initial
+    [Migration("20200816191136_migration")]
+    partial class migration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -50,29 +50,29 @@ namespace MyClassroom.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "a639f0c6-ec45-4899-8788-1c2d40c3a7fc",
-                            ConcurrencyStamp = "30b2cebd-77ad-4431-8aa6-c759364763ed",
+                            Id = "b0e3a26d-f395-45fb-a1de-3cde2410bdc0",
+                            ConcurrencyStamp = "9db0fd31-f543-4730-8746-9f0ffec18421",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "57b84790-267c-4c1c-952d-feb89576ff9a",
-                            ConcurrencyStamp = "4e2b860e-4db5-44dd-a79e-fc753d61ef04",
+                            Id = "e3f005f7-9c30-4dd2-89c4-e1a01d1be288",
+                            ConcurrencyStamp = "80744e8e-e823-4071-9199-42d2e2a6dd48",
                             Name = "Teacher",
                             NormalizedName = "TEACHER"
                         },
                         new
                         {
-                            Id = "4e2d0ebb-0320-4f9b-9561-d15c28f76fc7",
-                            ConcurrencyStamp = "1a7d4c6e-f3aa-45e6-98fd-4be2a328ad20",
+                            Id = "6bc4cd62-c4e2-46a9-a3b3-ede8481814e4",
+                            ConcurrencyStamp = "4b103012-92ea-46a2-a7f9-21cc4caa4ab8",
                             Name = "Parent",
                             NormalizedName = "PARENT"
                         },
                         new
                         {
-                            Id = "8dfe81fd-abae-40e6-9ebe-b05c8ff13d6d",
-                            ConcurrencyStamp = "488118ea-ad07-4c02-9124-40e1aedd1de9",
+                            Id = "008866d3-ebe4-491d-949c-57fc394575c0",
+                            ConcurrencyStamp = "747c83fb-7363-4d31-893c-66da23a56d2d",
                             Name = "Student",
                             NormalizedName = "STUDENT"
                         });
@@ -270,6 +270,24 @@ namespace MyClassroom.Migrations
                     b.ToTable("Attendance");
                 });
 
+            modelBuilder.Entity("MyClassroom.Models.Classroom", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("TeacherID")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Classroom");
+                });
+
             modelBuilder.Entity("MyClassroom.Models.DailyNote", b =>
                 {
                     b.Property<int>("Id")
@@ -303,6 +321,9 @@ namespace MyClassroom.Migrations
                     b.Property<int>("ClassId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("ClassroomId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
@@ -316,6 +337,8 @@ namespace MyClassroom.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ClassroomId");
 
                     b.HasIndex("StudentId");
 
@@ -379,6 +402,9 @@ namespace MyClassroom.Migrations
                     b.Property<int>("ClassId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("ClassroomId")
+                        .HasColumnType("int");
+
                     b.Property<string>("FirstName")
                         .HasColumnType("nvarchar(max)");
 
@@ -392,6 +418,8 @@ namespace MyClassroom.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ClassroomId");
 
                     b.HasIndex("IdentityUserId");
 
@@ -492,6 +520,10 @@ namespace MyClassroom.Migrations
 
             modelBuilder.Entity("MyClassroom.Models.Homework", b =>
                 {
+                    b.HasOne("MyClassroom.Models.Classroom", null)
+                        .WithMany("Homeworks")
+                        .HasForeignKey("ClassroomId");
+
                     b.HasOne("MyClassroom.Models.Student", null)
                         .WithMany("Homeworks")
                         .HasForeignKey("StudentId");
@@ -506,6 +538,10 @@ namespace MyClassroom.Migrations
 
             modelBuilder.Entity("MyClassroom.Models.Student", b =>
                 {
+                    b.HasOne("MyClassroom.Models.Classroom", null)
+                        .WithMany("Students")
+                        .HasForeignKey("ClassroomId");
+
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "IdentityUser")
                         .WithMany()
                         .HasForeignKey("IdentityUserId");

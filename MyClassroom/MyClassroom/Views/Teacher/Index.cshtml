@@ -1,38 +1,35 @@
-﻿@model MyClassroom.Models.Teacher
+﻿@model MyClassroom.Models.TeacherIndexViewModel
 
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Hello @Model.FirstName </h1>
+<style>
+    .btn {
+        margin-left: 10px;
+        margin-bottom: 10px;
+    }
+    .butt{
+        width : 200px;
+        height: 200px;
+    }
+</style>
+    <br />
+    <h1>Hello @Model.Teacher.FirstName</h1>
 <br />
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.FirstName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LastName)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            
-            <td>
-                @Html.DisplayFor(modelItem => Model.FirstName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => Model.LastName)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@Model.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@Model.Id">Delete</a>
-            </td>
-        </tr>
-    </tbody>
-</table>
+<div class="container">
+    <button type="button" value="Create" class="btn btn-secondary" onclick="location.href='@Url.Action("CreateClassroom", "Teacher")'">Create Class</button>
+
+</div>
+<br />
+<div class="row">
+    @foreach(var item in Model.MyClassrooms)
+    {
+        <button type="button" class="btn btn-primary btn-lg butt"onclick="location.href='@Url.Action("SelectClassroom", "Teacher")'">@item.Name</button>
+    }
+
+</div>
+
+
+

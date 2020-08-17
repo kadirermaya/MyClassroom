@@ -50,6 +50,7 @@ namespace MyClassroom.Data
         public DbSet<Models.Homework> Homeworks { get; set; }
         public DbSet<Models.Points> Points { get; set; }
         public DbSet<MyClassroom.Models.DailyNote> DailyNotes { get; set; }
+        public DbSet<MyClassroom.Models.Classroom> Classroom { get; set; }
 
 
     }

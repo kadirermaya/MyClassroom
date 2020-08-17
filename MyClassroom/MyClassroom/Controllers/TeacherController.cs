@@ -21,17 +21,38 @@ namespace MyClassroom.Controllers
         }
 
         // GET: Teachers
-        public IActionResult Index()
+        public ActionResult Index()
         {
+            TeacherIndexViewModel viewmodel = new TeacherIndexViewModel();
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var teacher = _context.Teachers.Where(c => c.IdentityUserId == userId).FirstOrDefault();
+            viewmodel.Teacher = _context.Teachers.Where(t => t.IdentityUserId == userId).FirstOrDefault();
+            viewmodel.MyClassrooms = _context.Classroom.Where(c => c.TeacherID == viewmodel.Teacher.Id).ToList();
             
-            if (teacher == null)
+            
+            if (viewmodel.Teacher == null)
             {
                 return RedirectToAction("Create");
 
             }
-            return View(teacher);
+            
+            return View(viewmodel);
+        }
+
+        public ActionResult SelectClassroom()
+        {
+            TeacherIndexViewModel viewmodel = new TeacherIndexViewModel();
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            viewmodel.Teacher = _context.Teachers.Where(t => t.IdentityUserId == userId).FirstOrDefault();
+            viewmodel.MyClassrooms = _context.Classroom.Where(c => c.TeacherID == viewmodel.Teacher.Id).ToList();
+
+
+            if (viewmodel.Teacher == null)
+            {
+                return RedirectToAction("Create");
+
+            }
+
+            return View(viewmodel);
         }
 
         // GET: Teachers/Details/5
@@ -57,6 +78,8 @@ namespace MyClassroom.Controllers
             return View();
         }
 
+        
+
         // POST: Teachers/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -72,6 +95,26 @@ namespace MyClassroom.Controllers
             _context.SaveChanges();
             return RedirectToAction(nameof(Index));
             
+        }
+
+        public IActionResult CreateClassroom()
+        {
+            return View();
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult CreateClassroom([Bind("TeacherId,Name")] Classroom classroom)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var teacher = _context.Teachers.Where(c => c.IdentityUserId == userId).FirstOrDefault();
+            classroom.TeacherID = teacher.Id;
+
+
+
+            _context.Classroom.Add(classroom);
+            _context.SaveChanges();
+            return RedirectToAction(nameof(Index));
+
         }
 
         // GET: Teachers/Edit/5

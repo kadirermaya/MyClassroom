@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace MyClassroom.Migrations
 {
-    public partial class initial : Migration
+    public partial class migration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -44,6 +44,20 @@ namespace MyClassroom.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Classroom",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    TeacherID = table.Column<int>(nullable: false),
+                    Name = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Classroom", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -190,29 +204,6 @@ namespace MyClassroom.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Students",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    IdentityUserId = table.Column<string>(nullable: true),
-                    ClassId = table.Column<int>(nullable: false),
-                    ParentId = table.Column<int>(nullable: false),
-                    FirstName = table.Column<string>(nullable: true),
-                    LastName = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Students", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Students_AspNetUsers_IdentityUserId",
-                        column: x => x.IdentityUserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Teachers",
                 columns: table => new
                 {
@@ -227,6 +218,36 @@ namespace MyClassroom.Migrations
                     table.PrimaryKey("PK_Teachers", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Teachers_AspNetUsers_IdentityUserId",
+                        column: x => x.IdentityUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Students",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    IdentityUserId = table.Column<string>(nullable: true),
+                    ClassId = table.Column<int>(nullable: false),
+                    ParentId = table.Column<int>(nullable: false),
+                    FirstName = table.Column<string>(nullable: true),
+                    LastName = table.Column<string>(nullable: true),
+                    ClassroomId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Students", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Students_Classroom_ClassroomId",
+                        column: x => x.ClassroomId,
+                        principalTable: "Classroom",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Students_AspNetUsers_IdentityUserId",
                         column: x => x.IdentityUserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
@@ -285,11 +306,18 @@ namespace MyClassroom.Migrations
                     Name = table.Column<string>(nullable: true),
                     Description = table.Column<string>(nullable: true),
                     Date = table.Column<DateTime>(nullable: false),
+                    ClassroomId = table.Column<int>(nullable: true),
                     StudentId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Homeworks", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Homeworks_Classroom_ClassroomId",
+                        column: x => x.ClassroomId,
+                        principalTable: "Classroom",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Homeworks_Students_StudentId",
                         column: x => x.StudentId,
@@ -303,10 +331,10 @@ namespace MyClassroom.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "a639f0c6-ec45-4899-8788-1c2d40c3a7fc", "30b2cebd-77ad-4431-8aa6-c759364763ed", "Admin", "ADMIN" },
-                    { "57b84790-267c-4c1c-952d-feb89576ff9a", "4e2b860e-4db5-44dd-a79e-fc753d61ef04", "Teacher", "TEACHER" },
-                    { "4e2d0ebb-0320-4f9b-9561-d15c28f76fc7", "1a7d4c6e-f3aa-45e6-98fd-4be2a328ad20", "Parent", "PARENT" },
-                    { "8dfe81fd-abae-40e6-9ebe-b05c8ff13d6d", "488118ea-ad07-4c02-9124-40e1aedd1de9", "Student", "STUDENT" }
+                    { "b0e3a26d-f395-45fb-a1de-3cde2410bdc0", "9db0fd31-f543-4730-8746-9f0ffec18421", "Admin", "ADMIN" },
+                    { "e3f005f7-9c30-4dd2-89c4-e1a01d1be288", "80744e8e-e823-4071-9199-42d2e2a6dd48", "Teacher", "TEACHER" },
+                    { "6bc4cd62-c4e2-46a9-a3b3-ede8481814e4", "4b103012-92ea-46a2-a7f9-21cc4caa4ab8", "Parent", "PARENT" },
+                    { "008866d3-ebe4-491d-949c-57fc394575c0", "747c83fb-7363-4d31-893c-66da23a56d2d", "Student", "STUDENT" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -359,6 +387,11 @@ namespace MyClassroom.Migrations
                 column: "StudentId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Homeworks_ClassroomId",
+                table: "Homeworks",
+                column: "ClassroomId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Homeworks_StudentId",
                 table: "Homeworks",
                 column: "StudentId");
@@ -367,6 +400,11 @@ namespace MyClassroom.Migrations
                 name: "IX_Parents_IdentityUserId",
                 table: "Parents",
                 column: "IdentityUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Students_ClassroomId",
+                table: "Students",
+                column: "ClassroomId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Students_IdentityUserId",
@@ -419,6 +457,9 @@ namespace MyClassroom.Migrations
 
             migrationBuilder.DropTable(
                 name: "Students");
+
+            migrationBuilder.DropTable(
+                name: "Classroom");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
