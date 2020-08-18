@@ -48,29 +48,29 @@ namespace MyClassroom.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "6f7ee99c-2d54-4cd2-9f21-6bcfc43f0b4e",
-                            ConcurrencyStamp = "d55da1fb-0d78-41b1-b48c-e731aeeefb0f",
+                            Id = "8058dc8f-ee1b-472f-b4ca-033e3a7562c7",
+                            ConcurrencyStamp = "4f85dff7-406f-47b2-a716-c6d40195ef3e",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "f20df566-4000-4ca9-995f-02eb65a1f025",
-                            ConcurrencyStamp = "81f1d8f8-d71c-48b9-add0-02478e9804cc",
+                            Id = "a1f1490c-6788-40bc-95e0-3e0be49d2056",
+                            ConcurrencyStamp = "9ae73fdc-1cfd-4a9a-b58a-82a3966346b4",
                             Name = "Teacher",
                             NormalizedName = "TEACHER"
                         },
                         new
                         {
-                            Id = "c9e15dd4-1037-4fa1-b66b-15fbf8b44e15",
-                            ConcurrencyStamp = "21008b8f-bb91-4d82-81f7-528a2ea1f47b",
+                            Id = "f0994fc0-0298-47f0-a9e3-8c1c0fcb151f",
+                            ConcurrencyStamp = "64e9fcca-ec82-4138-9b92-a70ed1166af4",
                             Name = "Parent",
                             NormalizedName = "PARENT"
                         },
                         new
                         {
-                            Id = "dee350eb-08b0-43c4-9baf-8b31f8591c6a",
-                            ConcurrencyStamp = "2efc83c9-27cd-495a-a556-6e76a2735bee",
+                            Id = "51e501b2-5538-4441-8c0d-bbb4177ff50c",
+                            ConcurrencyStamp = "d17a02a0-23a0-4fc4-9b32-38b4b76bd87b",
                             Name = "Student",
                             NormalizedName = "STUDENT"
                         });
@@ -376,6 +376,9 @@ namespace MyClassroom.Migrations
                     b.Property<string>("Behavior")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("Point")
+                        .HasColumnType("int");
+
                     b.Property<int>("StudentId")
                         .HasColumnType("int");
 
@@ -386,6 +389,8 @@ namespace MyClassroom.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("StudentId");
 
                     b.ToTable("Points");
                 });
@@ -413,6 +418,9 @@ namespace MyClassroom.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("ParentId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("Point")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -532,6 +540,15 @@ namespace MyClassroom.Migrations
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "IdentityUser")
                         .WithMany()
                         .HasForeignKey("IdentityUserId");
+                });
+
+            modelBuilder.Entity("MyClassroom.Models.Points", b =>
+                {
+                    b.HasOne("MyClassroom.Models.Student", null)
+                        .WithMany("Points")
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("MyClassroom.Models.Student", b =>

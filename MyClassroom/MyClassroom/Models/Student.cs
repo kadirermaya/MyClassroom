@@ -21,7 +21,9 @@ namespace MyClassroom.Models
         public int? ParentId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public int? Point { get; set; }
         public List<Attendance> Attendances { get; set; }
+        public List<Points> Points { get; set; }
         public List<Homework> Homeworks { get; set; }
         public List<DailyNote> DailyNotes { get; set; }
 

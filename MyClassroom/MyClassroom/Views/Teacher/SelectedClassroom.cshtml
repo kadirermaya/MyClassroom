@@ -4,15 +4,35 @@
     ViewData["Title"] = "SelectedClassroom";
 }
 <br />
-<h1>@Model.Classroom.Name</h1>
-<br />
 
+<h1>Hello @Model.Teacher.FirstName</h1>
+<h3>@Model.Classroom.Name</h3>
+
+<br />
+<style>
+    .btn {
+        margin-left: 10px;
+        margin-bottom: 10px;
+    }
+
+    .butt {
+        width: 200px;
+        height: 200px;
+    }
+</style>
 
 <!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-    Add Student
-</button>
-
+<div class="container">
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+        Add Student
+    </button>
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+        Reset All Points
+    </button>
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+        Assign Homework
+    </button>
+</div>
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -25,20 +45,31 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <div class="modal-body mx-3">
-                        <div class="md-form mb-5">
-                            <i class="fas fa-envelope prefix grey-text"></i>
-                            <input type="text" id="defaultForm-email" class="form-control validate" placeholder="Student First Name">
-                        </div>
-                        <div class="md-form mb-5">
-                            <i class="fas fa-envelope prefix grey-text"></i>
-                            <input type="text" id="defaultForm-email" class="form-control validate" placeholder="Student Last Name">
-                        </div>
-                    </div>
+                    <table class="table table-hover" id="students">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">First Name</th>
+                                <th scope="col">Last Name</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var student in Model.AllStudents)
+                            {
+                                <tr style="cursor:pointer">
+                                    <th scope="row">
+                                        <input type="checkbox" name="selectedStudent" value="@student.Id" />
+                                    </th>
+                                    <td>@student.FirstName</td>
+                                    <td>@student.LastName</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button id="btnSave" type="submit" class="btn btn-primary" asp-action="AddStudent" asp-route-id="@Model.Classroom.Id">Save changes</button>
+                    <button type="submit" class="btn btn-primary" asp-action="AddStudent" asp-route-id="@Model.Classroom.Id">Save changes</button>
                 </div>
             </form>
         </div>
@@ -50,7 +81,19 @@
 <div class="row">
     @foreach (var item in Model.Students)
     {
-        <a type="button" class="btn btn-primary btn-lg butt" asp-action="" asp-route-id="@item.Id">@item.FirstName @item.LastName</a>
-
+    <div>
+        <a type="button" class="btn btn-primary btn-lg butt" asp-action="" asp-route-id="@item.Id">@item.FirstName @item.LastName MyClass Points: @item.Point</a>
+    </div>
     }
 </div>
+
+<script>
+    const allTr = document.querySelectorAll("#students tbody tr");
+    for (const tr of allTr) {
+        tr.onclick = function (event) {
+            if (event.target.localName === "input") return;
+            event.preventDefault();
+            this.querySelector("input").checked = !this.querySelector("input").checked;
+        };
+    }
+</script>

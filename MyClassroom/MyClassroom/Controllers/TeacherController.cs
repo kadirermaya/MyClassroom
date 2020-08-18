@@ -26,15 +26,15 @@ namespace MyClassroom.Controllers
             TeacherIndexViewModel viewmodel = new TeacherIndexViewModel();
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             viewmodel.Teacher = _context.Teachers.Where(t => t.IdentityUserId == userId).FirstOrDefault();
-            viewmodel.MyClassrooms = _context.Classroom.Where(c => c.TeacherID == viewmodel.Teacher.Id).ToList();
-            
-            
+
+
             if (viewmodel.Teacher == null)
             {
                 return RedirectToAction("Create");
 
             }
-            
+
+            viewmodel.MyClassrooms = _context.Classroom.Where(c => c.TeacherID == viewmodel.Teacher.Id).ToList();
             return View(viewmodel);
         }
 
@@ -43,9 +43,13 @@ namespace MyClassroom.Controllers
             TeacherClassroomViewModel classroom = new TeacherClassroomViewModel();
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             classroom.Teacher = _context.Teachers.Where(t => t.IdentityUserId == userId).FirstOrDefault();
+            classroom.AllStudents = _context.Students.ToList();
             classroom.Students = _context.Students.Where(c => c.ClassId == id).ToList();
             classroom.Classroom = _context.Classroom.Where(cs => cs.Id == id).FirstOrDefault();
-            
+            classroom.Points = _context.Points.Where(p => p.TeacherId == classroom.Teacher.Id).ToList();
+            classroom.Student = _context.Students.Where(c => c.ClassId == id).FirstOrDefault();
+            classroom.Student.Point = 0;
+
             return View(classroom);
         }
 
@@ -65,6 +69,8 @@ namespace MyClassroom.Controllers
 
             return View(teacher);
         }
+
+        [HttpGet]
         public IActionResult AddStudent()
         {
             return View();
@@ -72,16 +78,20 @@ namespace MyClassroom.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult AddStudent(int id)
+        public IActionResult AddStudent(int id, [FromForm(Name = "selectedStudent")] List<int> selectedStudents)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var addedStudent = _context.Students.Where(c => c.IdentityUserId == userId).FirstOrDefault();
 
-
-
-            _context.Students.Add(addedStudent);
+            foreach (var studentId in selectedStudents)
+            {
+                var student = _context.Students.FirstOrDefault(x => x.Id == studentId);
+                if (student != null)
+                {
+                    student.ClassId = id;
+                }
+            }
             _context.SaveChanges();
-            return RedirectToAction(nameof(SelectedClassroom));
+            return RedirectToAction(nameof(SelectedClassroom), new { id });
 
         }
 
@@ -91,7 +101,7 @@ namespace MyClassroom.Controllers
             return View();
         }
 
-        
+
 
         // POST: Teachers/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
@@ -103,11 +113,11 @@ namespace MyClassroom.Controllers
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             teacher.IdentityUserId = userId;
 
-            
+
             _context.Add(teacher);
             _context.SaveChanges();
             return RedirectToAction(nameof(Index));
-            
+
         }
         public IActionResult CreateClassroom()
         {
@@ -215,6 +225,19 @@ namespace MyClassroom.Controllers
         private bool TeacherExists(int id)
         {
             return _context.Teachers.Any(e => e.Id == id);
+        }
+
+        public int CalculateTotalPoint(List<Points> Points)
+        {
+            int totalPoint = 0;
+
+            for (int i = 0; i < Points.Count; i++)
+            {
+                totalPoint += Points[i].Point;
+            }
+   
+            
+            return totalPoint;
         }
     }
 }

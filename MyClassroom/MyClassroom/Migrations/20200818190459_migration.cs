@@ -61,22 +61,6 @@ namespace MyClassroom.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Points",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    StudentId = table.Column<int>(nullable: false),
-                    TeacherId = table.Column<int>(nullable: false),
-                    Behavior = table.Column<string>(nullable: true),
-                    Time = table.Column<DateTime>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Points", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -235,6 +219,7 @@ namespace MyClassroom.Migrations
                     ParentId = table.Column<int>(nullable: true),
                     FirstName = table.Column<string>(nullable: true),
                     LastName = table.Column<string>(nullable: true),
+                    Point = table.Column<int>(nullable: true),
                     ClassroomId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
@@ -326,15 +311,38 @@ namespace MyClassroom.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Points",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    StudentId = table.Column<int>(nullable: false),
+                    TeacherId = table.Column<int>(nullable: false),
+                    Behavior = table.Column<string>(nullable: true),
+                    Time = table.Column<DateTime>(nullable: false),
+                    Point = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Points", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Points_Students_StudentId",
+                        column: x => x.StudentId,
+                        principalTable: "Students",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "6f7ee99c-2d54-4cd2-9f21-6bcfc43f0b4e", "d55da1fb-0d78-41b1-b48c-e731aeeefb0f", "Admin", "ADMIN" },
-                    { "f20df566-4000-4ca9-995f-02eb65a1f025", "81f1d8f8-d71c-48b9-add0-02478e9804cc", "Teacher", "TEACHER" },
-                    { "c9e15dd4-1037-4fa1-b66b-15fbf8b44e15", "21008b8f-bb91-4d82-81f7-528a2ea1f47b", "Parent", "PARENT" },
-                    { "dee350eb-08b0-43c4-9baf-8b31f8591c6a", "2efc83c9-27cd-495a-a556-6e76a2735bee", "Student", "STUDENT" }
+                    { "8058dc8f-ee1b-472f-b4ca-033e3a7562c7", "4f85dff7-406f-47b2-a716-c6d40195ef3e", "Admin", "ADMIN" },
+                    { "a1f1490c-6788-40bc-95e0-3e0be49d2056", "9ae73fdc-1cfd-4a9a-b58a-82a3966346b4", "Teacher", "TEACHER" },
+                    { "f0994fc0-0298-47f0-a9e3-8c1c0fcb151f", "64e9fcca-ec82-4138-9b92-a70ed1166af4", "Parent", "PARENT" },
+                    { "51e501b2-5538-4441-8c0d-bbb4177ff50c", "d17a02a0-23a0-4fc4-9b32-38b4b76bd87b", "Student", "STUDENT" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -400,6 +408,11 @@ namespace MyClassroom.Migrations
                 name: "IX_Parents_IdentityUserId",
                 table: "Parents",
                 column: "IdentityUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Points_StudentId",
+                table: "Points",
+                column: "StudentId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Students_ClassroomId",

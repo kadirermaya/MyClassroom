@@ -17,5 +17,6 @@ namespace MyClassroom.Models
         public int TeacherId { get; set; }
         public string Behavior { get; set; }
         public DateTime Time { get; set; }
+        public int Point { get; set; }
     }
 }
