@@ -38,6 +38,21 @@ namespace MyClassroom.Controllers
             return View(viewmodel);
         }
 
+        public ActionResult SelectedStudent(int? id)
+        {
+            TeacherStudenViewModel student = new TeacherStudenViewModel();
+            student.Student = _context.Students.Where(s => s.Id == id).FirstOrDefault();
+            student.Classroom = _context.Classroom.Where(c => c.Id == student.Student.ClassId).FirstOrDefault();
+            //var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            //classroom.Teacher = _context.Teachers.Where(t => t.IdentityUserId == userId).FirstOrDefault();
+            //classroom.AllStudents = _context.Students.ToList();
+            //classroom.Students = _context.Students.Where(c => c.ClassId == id).ToList();
+            //classroom.Classroom = _context.Classroom.Where(cs => cs.Id == id).FirstOrDefault();
+            //classroom.Points = _context.Points.Where(p => p.TeacherId == classroom.Teacher.Id).ToList();
+
+            return View(student);
+        }
+
         public ActionResult SelectedClassroom(int? id)
         {
             TeacherClassroomViewModel classroom = new TeacherClassroomViewModel();
@@ -47,9 +62,7 @@ namespace MyClassroom.Controllers
             classroom.Students = _context.Students.Where(c => c.ClassId == id).ToList();
             classroom.Classroom = _context.Classroom.Where(cs => cs.Id == id).FirstOrDefault();
             classroom.Points = _context.Points.Where(p => p.TeacherId == classroom.Teacher.Id).ToList();
-            classroom.Student = _context.Students.Where(c => c.ClassId == id).FirstOrDefault();
-            classroom.Student.Point = 0;
-
+            
             return View(classroom);
         }
 
@@ -95,6 +108,39 @@ namespace MyClassroom.Controllers
 
         }
 
+        public IActionResult Attendance()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Attendance(int id, [FromForm(Name = "selectedStudent")] List<int> selectedStudents)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            foreach (var studentId in selectedStudents)
+            {
+                Attendance attendance = new Attendance();
+                var student = _context.Students.FirstOrDefault(x => x.Id == studentId);
+                
+                if (student != null)
+                {
+                    attendance.StudentId = student.Id;
+                    attendance.Description = "absent";
+                    attendance.Date = DateTime.Now;
+                    _context.Add(attendance);
+                }
+            }
+            _context.SaveChanges();
+            return RedirectToAction(nameof(SelectedClassroom), new { id });
+
+        }
+
+        
+        
+        
+        
         //GET: Teachers/Create
         public IActionResult Create()
         {

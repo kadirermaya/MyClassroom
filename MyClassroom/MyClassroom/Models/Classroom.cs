@@ -19,7 +19,6 @@ namespace MyClassroom.Models
         public List<Homework>? Homeworks { get; set; }
 
         
-        Teacher teacher = new Teacher();
         
 
 

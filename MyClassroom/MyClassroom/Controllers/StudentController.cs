@@ -62,7 +62,7 @@ namespace MyClassroom.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create([Bind("Id,IdentityUserId,ClassId,ParentId,FirstName,LastName")] Student student)
+        public IActionResult Create([Bind("Id,IdentityUserId,ClassId,ParentId,FirstName,LastName,Point")] Student student)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             student.IdentityUserId = userId;

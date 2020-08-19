@@ -5,8 +5,9 @@
 }
 <br />
 
-<h1>Hello @Model.Teacher.FirstName</h1>
-<h3>@Model.Classroom.Name</h3>
+<h1 >Hello @Model.Teacher.FirstName</h1>
+
+<h3 style="text-align:center">@Model.Classroom.Name</h3>
 
 <br />
 <style>
@@ -22,8 +23,8 @@
 </style>
 
 <!-- Button trigger modal -->
-<div class="container">
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+<div class="containeer" style="text-align:center">
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addStudentModal">
         Add Student
     </button>
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
@@ -32,9 +33,14 @@
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
         Assign Homework
     </button>
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#attendanceModal">
+        Attendance
+    </button>
+
 </div>
-<!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+<!--Add Student Modal -->
+<div class="modal fade" id="addStudentModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <form asp-action="AddStudent" method="post" enctype="multipart/form-data" asp-controller="TeacherController">
@@ -75,15 +81,56 @@
         </div>
     </div>
 </div>
-
+<!--Attendance Modal -->
+<div class="modal fade" id="attendanceModal" tabindex="-1" aria-labelledby="attendanceModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form asp-action="Attendance" method="post" enctype="multipart/form-data" asp-controller="TeacherController">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="attendanceModal">Attendance</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-hover" id="students">
+                        <thead>
+                            <tr>
+                                <th scope="col">Absent</th>
+                                <th scope="col">First Name</th>
+                                <th scope="col">Last Name</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var student in Model.AllStudents)
+                            {
+                                <tr style="cursor:pointer">
+                                    <th scope="row">
+                                        <input type="checkbox" name="selectedStudent" value="@student.Id" />
+                                    </th>
+                                    <td>@student.FirstName</td>
+                                    <td>@student.LastName</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" asp-action="Attendance" asp-route-id="@Model.Classroom.Id">Save changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 
 <div class="row">
     @foreach (var item in Model.Students)
     {
-    <div>
-        <a type="button" class="btn btn-primary btn-lg butt" asp-action="" asp-route-id="@item.Id">@item.FirstName @item.LastName MyClass Points: @item.Point</a>
-    </div>
+        <div>
+            <a type="button" class="btn btn-primary btn-lg butt" asp-action="SelectedStudent" asp-route-id="@item.Id"><br />@item.FirstName @item.LastName <br /><br /> Points:<br />@item.Point</a>
+        </div>
     }
 </div>
 

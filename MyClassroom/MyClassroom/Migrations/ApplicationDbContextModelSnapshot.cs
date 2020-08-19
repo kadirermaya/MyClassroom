@@ -48,29 +48,29 @@ namespace MyClassroom.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "8058dc8f-ee1b-472f-b4ca-033e3a7562c7",
-                            ConcurrencyStamp = "4f85dff7-406f-47b2-a716-c6d40195ef3e",
+                            Id = "ef471860-1ef7-460f-9e59-d51e3d5f695d",
+                            ConcurrencyStamp = "0a0da742-b7f8-4c13-9468-2063e20dea30",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "a1f1490c-6788-40bc-95e0-3e0be49d2056",
-                            ConcurrencyStamp = "9ae73fdc-1cfd-4a9a-b58a-82a3966346b4",
+                            Id = "76ee9b34-ba52-4b97-9d00-44dc99d8a35e",
+                            ConcurrencyStamp = "801e0b62-7247-4c70-8a6d-58edab070b3b",
                             Name = "Teacher",
                             NormalizedName = "TEACHER"
                         },
                         new
                         {
-                            Id = "f0994fc0-0298-47f0-a9e3-8c1c0fcb151f",
-                            ConcurrencyStamp = "64e9fcca-ec82-4138-9b92-a70ed1166af4",
+                            Id = "8cb20acd-97ab-4e7b-b0a7-0dd36d85d344",
+                            ConcurrencyStamp = "f6dfb8e7-f73b-4704-83a3-e8817f301d78",
                             Name = "Parent",
                             NormalizedName = "PARENT"
                         },
                         new
                         {
-                            Id = "51e501b2-5538-4441-8c0d-bbb4177ff50c",
-                            ConcurrencyStamp = "d17a02a0-23a0-4fc4-9b32-38b4b76bd87b",
+                            Id = "3dcfb6ba-c72d-45a9-b9ff-b27c3b49f0c6",
+                            ConcurrencyStamp = "2ac12643-29b9-4f4d-a00c-e9dd867ee332",
                             Name = "Student",
                             NormalizedName = "STUDENT"
                         });

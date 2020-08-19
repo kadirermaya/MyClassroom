@@ -1,0 +1,56 @@
+﻿@model MyClassroom.Models.TeacherStudenViewModel
+
+@{
+    ViewData["Title"] = "SelectedStudent";
+}
+
+<style>
+    .float-container {
+        border: 3px solid #fff;
+        padding: 20px;
+    }
+
+    .float-child {
+        width: 50%;
+        float: left;
+        padding: 20px;
+    }
+</style>
+
+
+<br />
+<h5>Classroom: @Model.Classroom.Name</h5>
+<h4>Student: @Model.Student.FirstName @Model.Student.LastName</h4>
+
+<div class="float-container">
+    <div class="float-child">
+        <div class="green">Positive</div>
+
+    </div>
+    <div class="float-child">
+        <div class="blue">Needs Work</div>
+    </div>
+</div>
+<div class="float-container">
+    <div class="float-child">
+        <div class="containeer">
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                Add Positive
+            </button>            
+        </div>
+    </div>
+    <div class="float-child">
+        <div class="containeer">
+            <button type="button" class="btn btn-primary" data-toggle="modal1" data-target="#exampleModal">
+                Add Needs Work
+            </button>
+            
+        </div>
+</div>
+<div>
+
+
+</div>
+
+
+
