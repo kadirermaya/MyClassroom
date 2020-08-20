@@ -15,6 +15,8 @@ using Microsoft.Extensions.Hosting;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
 using MyClassroom.ActionFilters;
+using SignalRChat.Hubs;
+
 
 namespace MyClassroom
 {
@@ -48,6 +50,8 @@ namespace MyClassroom
                 .AddControllersWithViews()
                 .AddRazorRuntimeCompilation();
             services.AddRazorPages();
+            services.AddSignalR();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -78,6 +82,8 @@ namespace MyClassroom
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
+                endpoints.MapHub<ChatHub>("/chathub");
+
             });
         }
     }

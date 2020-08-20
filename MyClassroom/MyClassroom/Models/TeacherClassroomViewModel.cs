@@ -12,5 +12,6 @@ namespace MyClassroom.Models
         public Teacher Teacher { get; set; }
         public Classroom Classroom { get; set; }
         public List<Points> Points { get; set; }
+        public Homework Homework { get; set; }
     }
 }

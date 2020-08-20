@@ -38,6 +38,24 @@ namespace MyClassroom.Controllers
             return View(viewmodel);
         }
 
+        public ActionResult TeacherChat(int id)
+        {
+            TeacherStudenViewModel viewmodel = new TeacherStudenViewModel();
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            viewmodel.Teacher = _context.Teachers.Where(t => t.IdentityUserId == userId).FirstOrDefault();
+            viewmodel.Student = _context.Students.Where(t => t.Id == id).FirstOrDefault();
+            viewmodel.Parent = _context.Parents.Where(t => t.Id == viewmodel.Student.ParentId).FirstOrDefault();
+
+            if (viewmodel.Student == null)
+            {
+                return RedirectToAction("SelectedClassroom");
+
+            }
+
+            return View(viewmodel);
+        }
+
+
         public ActionResult SelectedStudent(int? id)
         {
             TeacherStudenViewModel student = new TeacherStudenViewModel();
@@ -62,7 +80,7 @@ namespace MyClassroom.Controllers
             classroom.Students = _context.Students.Where(c => c.ClassId == id).ToList();
             classroom.Classroom = _context.Classroom.Where(cs => cs.Id == id).FirstOrDefault();
             classroom.Points = _context.Points.Where(p => p.TeacherId == classroom.Teacher.Id).ToList();
-            
+            classroom.Homework = _context.Homeworks.Where(hw => hw.ClassId == id && hw.Date == DateTime.Now.Date).FirstOrDefault();
             return View(classroom);
         }
 
@@ -108,6 +126,50 @@ namespace MyClassroom.Controllers
 
         }
 
+        //public IActionResult AssignHomework()
+        //{
+        //    return View();
+        //}
+
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public IActionResult AssignHomework(int id)
+        //{
+        //    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        //    var homeworks = _context.Homeworks.Where(h => h.ClassId == id).ToList();
+        //    foreach (var homework in homeworks)
+        //    {
+        //        homework.ClassId = id
+        //    }
+
+        //    return RedirectToAction(nameof(SelectedClassroom), new { id });
+
+        //}
+
+        public IActionResult CreateHomework()
+        {
+            return View();
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult CreateHomework(int id, [Bind("Name,Description")] Homework homework)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var teacher = _context.Teachers.Where(c => c.IdentityUserId == userId).FirstOrDefault();
+            homework.ClassId = id;
+            homework.Date = DateTime.Now.Date;
+            _context.Homeworks.Add(homework);
+            _context.SaveChanges();
+
+            var startDate = DateTime.Now.Date; // 2020-08-19 00:00
+            var endDate = DateTime.Now.Date.AddDays(1).AddMilliseconds(-1); // +1 = 2020-08-20 00:00 // -1 ms => 2020-08-19 23:59:59 99999
+
+            var data = _context.Homeworks.Where(x => x.Date >= startDate && x.Date <= endDate).ToList();
+
+            return RedirectToAction(nameof(SelectedClassroom), new { id });
+
+        }
+
         public IActionResult Attendance()
         {
             return View();
@@ -123,12 +185,12 @@ namespace MyClassroom.Controllers
             {
                 Attendance attendance = new Attendance();
                 var student = _context.Students.FirstOrDefault(x => x.Id == studentId);
-                
+
                 if (student != null)
                 {
                     attendance.StudentId = student.Id;
                     attendance.Description = "absent";
-                    attendance.Date = DateTime.Now;
+                    attendance.Date = DateTime.Now.Date;
                     _context.Add(attendance);
                 }
             }
@@ -137,16 +199,33 @@ namespace MyClassroom.Controllers
 
         }
 
-        
-        
-        
-        
+
+        public IActionResult ResetAllPoints()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult ResetAllPoints(int id)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var filteredStudent = _context.Students.Where(s => s.ClassId == id).ToList();
+            foreach (var student in filteredStudent)
+            {
+                student.Point = 0;
+                _context.Update(student);
+            }
+
+            _context.SaveChanges();
+            return RedirectToAction(nameof(SelectedClassroom), new { id });
+        }
+
         //GET: Teachers/Create
         public IActionResult Create()
         {
             return View();
         }
-
 
 
         // POST: Teachers/Create
@@ -281,8 +360,8 @@ namespace MyClassroom.Controllers
             {
                 totalPoint += Points[i].Point;
             }
-   
-            
+
+
             return totalPoint;
         }
     }

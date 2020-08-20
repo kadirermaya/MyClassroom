@@ -21,6 +21,15 @@
 <br />
 <h5>Classroom: @Model.Classroom.Name</h5>
 <h4>Student: @Model.Student.FirstName @Model.Student.LastName</h4>
+<div class="containeer" style="text-align:center">
+    <form asp-action="TeacherChat" method="post" enctype="multipart/form-data" asp-controller="TeacherController">
+
+        <div>
+            <button type="submit" class="btn btn-primary" asp-action="TeacherChat" asp-route-id="@Model.Classroom.Id">Send Message to Parent</button>
+        </div>
+
+    </form>
+</div>
 
 <div class="float-container">
     <div class="float-child">
@@ -36,7 +45,7 @@
         <div class="containeer">
             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
                 Add Positive
-            </button>            
+            </button>
         </div>
     </div>
     <div class="float-child">
@@ -44,13 +53,9 @@
             <button type="button" class="btn btn-primary" data-toggle="modal1" data-target="#exampleModal">
                 Add Needs Work
             </button>
-            
+
         </div>
+    </div>
+    
+
 </div>
-<div>
-
-
-</div>
-
-
-

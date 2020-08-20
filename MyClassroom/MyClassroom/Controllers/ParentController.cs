@@ -34,6 +34,24 @@ namespace MyClassroom.Controllers
             return View(parent);
         }
 
+        public IActionResult ParentChat()
+        {
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var parent = _context.Parents.Where(c => c.IdentityUserId == userId).FirstOrDefault();
+            TeacherStudenViewModel viewmodel = new TeacherStudenViewModel();
+            viewmodel.Teacher = _context.Teachers.Where(t => t.IdentityUserId == userId).FirstOrDefault();
+            viewmodel.Student = _context.Students.Where(t => t.Id == parent.Id).FirstOrDefault();
+            viewmodel.Parent = _context.Parents.Where(t => t.Id == viewmodel.Student.ParentId).FirstOrDefault();
+
+            if (viewmodel.Student == null)
+            {
+                return RedirectToAction("SelectedClassroom");
+
+            }
+
+            return View(viewmodel);
+        }
+
         // GET: Parents/Details/5
         public async Task<IActionResult> Details(int? id)
         {

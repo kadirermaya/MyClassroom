@@ -23,7 +23,7 @@
     </thead>
     <tbody>
         <tr>
-           
+
             <td>
                 @Html.DisplayFor(modelItem => Model.FirstName)
             </td>
@@ -39,3 +39,11 @@
 
     </tbody>
 </table>
+
+<form asp-action="ParentChat" method="post" enctype="multipart/form-data" asp-controller="ParentController">
+
+    <div>
+        <button type="submit" class="btn btn-primary" asp-action="ParentChat" asp-route-id="@Model.Id">Send Message to Teacher</button>
+    </div>
+
+</form>
