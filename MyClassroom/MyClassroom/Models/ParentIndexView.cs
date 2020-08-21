@@ -13,7 +13,7 @@ namespace MyClassroom.Models
         public List<Attendance> Attendances { get; set; }
         public List<Homework> Homeworks { get; set; }
         public List<StudentSkill> StudentSkills { get; set; }
-        public string DailyNote { get; set; }
+        public DailyNote DailyNote { get; set; }
 
 
     }

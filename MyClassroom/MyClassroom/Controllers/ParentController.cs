@@ -23,16 +23,17 @@ namespace MyClassroom.Controllers
         // GET: Parents
         public IActionResult Index()
         {
+            //ParentIndexView parentIndex = new ParentIndexView();
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var parent = _context.Parents.Where(c => c.IdentityUserId == userId).FirstOrDefault();
-            var student = _context.Students.Where(s => s.ParentId == parent.Id).FirstOrDefault();
-            var dailyNote = _context.DailyNotes.Where(d => d.StudentId == student.Id && d.Date == DateTime.Now.Date);
-
+            var parent = _context.Parents.Where(p => p.IdentityUserId == userId).FirstOrDefault();
             if (parent == null)
             {
                 return RedirectToAction("Create");
-
             }
+            //parentIndex.Parent = _context.Parents.Where(c => c.IdentityUserId == userId).FirstOrDefault();
+            //parentIndex.Student = _context.Students.Where(s => s.ParentId == parentIndex.Parent.Id).FirstOrDefault();
+            //parentIndex.DailyNote = _context.DailyNotes.Where(d => d.StudentId == parentIndex.Student.Id && d.Date == DateTime.Now.Date).FirstOrDefault();
+
             return View(parent);
         }
 
@@ -88,11 +89,17 @@ namespace MyClassroom.Controllers
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             parent.IdentityUserId = userId;
+            var student = _context.Students.Where(s => s.FirstName == StudentFirstName && s.LastName == StudentLastName).FirstOrDefault();
+            if (student == null)
+            {
+                return RedirectToAction(nameof(Create));
+            }
+            student.ParentId = parent.Id;
 
+            _context.Students.Update(student);
             _context.Add(parent);
             _context.SaveChanges();
 
-            UpdateParentId(StudentFirstName, StudentLastName, parent.Id);
             return RedirectToAction(nameof(Index));
         }
 
@@ -184,12 +191,16 @@ namespace MyClassroom.Controllers
             return _context.Parents.Any(e => e.Id == id);
         }
 
-        public void UpdateParentId(string firstName, string lastName, int ParentId)
-        {
-            var student = _context.Students.Where(s => s.FirstName == firstName && s.LastName == lastName).FirstOrDefault();
-            student.ParentId = ParentId;
-            _context.Students.Update(student);
-            _context.SaveChanges();
-        }
+        //public void UpdateParentId(string firstName, string lastName, int ParentId)
+        //{
+        //    var student = _context.Students.Where(s => s.FirstName == firstName && s.LastName == lastName).FirstOrDefault();
+        //    if(student == null)
+        //    {
+
+        //    }
+        //    student.ParentId = ParentId;
+        //    _context.Students.Update(student);
+        //    _context.SaveChanges();
+        //}
     }
 }

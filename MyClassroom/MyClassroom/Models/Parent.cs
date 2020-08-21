@@ -15,7 +15,11 @@ namespace MyClassroom.Models
         [ForeignKey("IdentityUser")]
         public string IdentityUserId { get; set; }
         public IdentityUser IdentityUser { get; set; }
+        [Display(Name = "First Name")]
+        [Required(ErrorMessage = "First Name is a Required Input")]
         public string FirstName { get; set; }
+        [Display(Name = "Last Name")]
+        [Required(ErrorMessage = "Last Name is a Required Input")]
         public string LastName { get; set; }
     }
 }

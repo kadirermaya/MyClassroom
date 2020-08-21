@@ -23,6 +23,7 @@ namespace MyClassroom.Controllers
         // GET: Teachers
         public ActionResult Index()
         {
+            Classroom classroom = new Classroom();
             TeacherIndexViewModel viewmodel = new TeacherIndexViewModel();
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             viewmodel.Teacher = _context.Teachers.Where(t => t.IdentityUserId == userId).FirstOrDefault();

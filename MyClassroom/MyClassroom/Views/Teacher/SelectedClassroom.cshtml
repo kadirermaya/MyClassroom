@@ -3,18 +3,9 @@
 @{
     ViewData["Title"] = "SelectedClassroom";
 }
-<br />
-
-<h1>Hello @Model.Teacher.FirstName</h1>
-<a class="badge badge-secondary" asp-action="Index">Back to Classrooms</a>
-
-
-<h3 style="text-align:center">@Model.Classroom.Name</h3>
-
-<br />
 <style>
     .btn {
-        margin-left: 10px;
+        margin: 10px 10px 10px 0;
         margin-bottom: 10px;
     }
 
@@ -23,6 +14,15 @@
         height: 200px;
     }
 </style>
+<br />
+
+<h1>Hello @Model.Teacher.FirstName</h1>
+<a class="badge badge-secondary" asp-action="Index">Back to Classrooms</a>
+
+<br/>
+<br />
+<h3 style="text-align:center">@Model.Classroom.Name</h3>
+
 
 <!-- Button trigger modal -->
 <div class="containeer single-line" style="text-align:center">
@@ -31,7 +31,7 @@
         <button type="submit" class="btn btn-primary" data-toggle="modal">Reset All Points</button>
     </form>
     <form asp-action="CreateHomework" asp-controller="Teacher" asp-route-id="@Model.Classroom.Id" method="post">
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createHomeworkModal">Assign Homework</button>
+        <buttaon type="button" class="btn btn-primary" data-toggle="modal" data-target="#createHomeworkModal">Assign Homework</buttaon>
     </form>
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#attendanceModal">Attendance</button>
 
@@ -155,51 +155,66 @@
 
 @if (Model.Students.Count != 0)
 {
-    <div class="row">
-
-        @foreach (var item in Model.Students)
-        {
-            <div>
-                <a type="button" class="btn btn-primary btn-lg butt" asp-action="SelectedStudent" asp-route-id="@item.Id"><br />@item.FirstName @item.LastName <br /><br /> Points:<br />@item.Point</a>
-            </div>
-        }
-    </div>
-}
-@if (Model.Students.Count == 0)
-{
-    <div class="container" style="text-align:center">
-
-        <div class="card text-white bg-primary mb-3">
-            <div class="card-body">
-                <h4 class="card-title">You didn't add any student in @Model.Classroom.Name!</h4>
-                <p class="card-text">Click Add Student button in order to start MyClassroom.</p>
-            </div>
+<div class="container">
+    <div class="container">
+        <div class="row">
+            @foreach (var item in Model.Students)
+            {
+                <div>
+                    <a type="button" class="btn btn-primary btn-lg butt" asp-action="SelectedStudent" asp-route-id="@item.Id"><br />@item.FirstName @item.LastName <br /><br /> Points:<br />@item.Point</a>
+                </div>
+            }
         </div>
     </div>
-}
-
-@if (Model.Homework != null)
-{
-    <div class="container" style="text-align:center">
-        <div class="card text-white bg-danger mb-3">
-            <div class="card-header">Today's Homework</div>
-            <div class="card-body">
-                <h4 class="card-title">@Model.Homework.Name</h4>
-                <p class="card-text">@Model.Homework.Description</p>
-            </div>
-        </div>
-    </div>
-
-}
-
-
-<script>
-    const allTr = document.querySelectorAll("#students tbody tr");
-    for (const tr of allTr) {
-        tr.onclick = function (event) {
-            if (event.target.localName === "input") return;
-            event.preventDefault();
-            this.querySelector("input").checked = !this.querySelector("input").checked;
-        };
+</div>
     }
-</script>
+    @if (Model.Students.Count == 0)
+    {
+        <div class="container" style="text-align:center">
+
+            <div class="card text-white bg-primary mb-3">
+                <div class="card-body">
+                    <h4 class="card-title">You didn't add any student in @Model.Classroom.Name!</h4>
+                    <p class="card-text">Click <strong>Add Student</strong> button in order to start MyClassroom.</p>
+                </div>
+            </div>
+        </div>
+    }
+
+    @if (Model.Homework != null)
+    {
+        <div class="container" style="text-align:center">
+            <div class="card text-white bg-danger mb-3">
+                <div class="card-header">Today's Homework</div>
+                <div class="card-body">
+                    <h4 class="card-title">@Model.Homework.Name</h4>
+                    <p class="card-text">@Model.Homework.Description</p>
+                </div>
+            </div>
+        </div>
+
+    }
+    @if (Model.Homework == null)
+    {
+        <div class="container" style="text-align:center">
+            <div class="card text-white bg-info  mb-3">
+                <div class="card-header">No homework!</div>
+                <div class="card-body">
+                    <h4 class="card-title">Teacher didn't assigned homework yet!</h4>
+                    <p class="card-text"></p>
+                </div>
+            </div>
+        </div>
+    }
+
+
+    <script>
+        const allTr = document.querySelectorAll("#students tbody tr");
+        for (const tr of allTr) {
+            tr.onclick = function (event) {
+                if (event.target.localName === "input") return;
+                event.preventDefault();
+                this.querySelector("input").checked = !this.querySelector("input").checked;
+            };
+        }
+    </script>
