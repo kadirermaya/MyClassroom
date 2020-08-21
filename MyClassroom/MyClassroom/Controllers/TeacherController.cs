@@ -102,6 +102,33 @@ namespace MyClassroom.Controllers
         }
 
         [HttpGet]
+        public IActionResult AddDailyNote()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult AddDailyNote(int id, [Bind("Description")] DailyNote dailyNote)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var student = _context.Students.Where(s => s.Id == id).FirstOrDefault();
+            dailyNote.StudentId = student.Id;
+            dailyNote.Date = DateTime.Now.Date;
+            dailyNote.Description = dailyNote.Description;
+            
+            if(dailyNote != null)
+            {
+
+            _context.DailyNotes.Add(dailyNote);
+            }
+
+            _context.SaveChanges();
+            return RedirectToAction(nameof(SelectedStudent), new { id });
+
+        }
+
+        [HttpGet]
         public IActionResult AddStudent()
         {
             return View();

@@ -25,6 +25,8 @@ namespace MyClassroom.Controllers
         {
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             var parent = _context.Parents.Where(c => c.IdentityUserId == userId).FirstOrDefault();
+            var student = _context.Students.Where(s => s.ParentId == parent.Id).FirstOrDefault();
+            var dailyNote = _context.DailyNotes.Where(d => d.StudentId == student.Id && d.Date == DateTime.Now.Date);
 
             if (parent == null)
             {
