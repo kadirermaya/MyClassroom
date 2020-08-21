@@ -10,8 +10,8 @@ using MyClassroom.Data;
 namespace MyClassroom.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200819041354_migration")]
-    partial class migration
+    [Migration("20200820230841_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -50,29 +50,29 @@ namespace MyClassroom.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "ef471860-1ef7-460f-9e59-d51e3d5f695d",
-                            ConcurrencyStamp = "0a0da742-b7f8-4c13-9468-2063e20dea30",
+                            Id = "5359c7f6-00fd-4571-b963-1b34598c9686",
+                            ConcurrencyStamp = "1efa4e47-7ea6-4844-8547-6fdd10785614",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "76ee9b34-ba52-4b97-9d00-44dc99d8a35e",
-                            ConcurrencyStamp = "801e0b62-7247-4c70-8a6d-58edab070b3b",
+                            Id = "8a3b3290-d91a-4d18-be44-a333bb01801b",
+                            ConcurrencyStamp = "04c4f01e-1868-4b36-8bf7-ead5ea13fc46",
                             Name = "Teacher",
                             NormalizedName = "TEACHER"
                         },
                         new
                         {
-                            Id = "8cb20acd-97ab-4e7b-b0a7-0dd36d85d344",
-                            ConcurrencyStamp = "f6dfb8e7-f73b-4704-83a3-e8817f301d78",
+                            Id = "44c4dec7-8203-4725-aac3-d97f9a19fcf7",
+                            ConcurrencyStamp = "c956d090-2c8d-442a-bb2b-10eb9ee551b0",
                             Name = "Parent",
                             NormalizedName = "PARENT"
                         },
                         new
                         {
-                            Id = "3dcfb6ba-c72d-45a9-b9ff-b27c3b49f0c6",
-                            ConcurrencyStamp = "2ac12643-29b9-4f4d-a00c-e9dd867ee332",
+                            Id = "c8275458-9014-40b5-b69c-28032751b1a3",
+                            ConcurrencyStamp = "93cc6eda-d48c-4407-9918-f7897e722b1a",
                             Name = "Student",
                             NormalizedName = "STUDENT"
                         });
@@ -368,33 +368,25 @@ namespace MyClassroom.Migrations
                     b.ToTable("Parents");
                 });
 
-            modelBuilder.Entity("MyClassroom.Models.Points", b =>
+            modelBuilder.Entity("MyClassroom.Models.Skill", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Behavior")
+                    b.Property<int>("ClassId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Point")
                         .HasColumnType("int");
 
-                    b.Property<int>("StudentId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TeacherId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("Time")
-                        .HasColumnType("datetime2");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("StudentId");
-
-                    b.ToTable("Points");
+                    b.ToTable("Skill");
                 });
 
             modelBuilder.Entity("MyClassroom.Models.Student", b =>
@@ -432,6 +424,35 @@ namespace MyClassroom.Migrations
                     b.HasIndex("IdentityUserId");
 
                     b.ToTable("Students");
+                });
+
+            modelBuilder.Entity("MyClassroom.Models.StudentSkill", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("ClassId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Point")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SkillId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StudentId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StudentId");
+
+                    b.ToTable("StudentSkill");
                 });
 
             modelBuilder.Entity("MyClassroom.Models.Teacher", b =>
@@ -544,15 +565,6 @@ namespace MyClassroom.Migrations
                         .HasForeignKey("IdentityUserId");
                 });
 
-            modelBuilder.Entity("MyClassroom.Models.Points", b =>
-                {
-                    b.HasOne("MyClassroom.Models.Student", null)
-                        .WithMany("Points")
-                        .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("MyClassroom.Models.Student", b =>
                 {
                     b.HasOne("MyClassroom.Models.Classroom", null)
@@ -562,6 +574,15 @@ namespace MyClassroom.Migrations
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "IdentityUser")
                         .WithMany()
                         .HasForeignKey("IdentityUserId");
+                });
+
+            modelBuilder.Entity("MyClassroom.Models.StudentSkill", b =>
+                {
+                    b.HasOne("MyClassroom.Models.Student", null)
+                        .WithMany("StudentSkills")
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("MyClassroom.Models.Teacher", b =>

@@ -18,8 +18,7 @@ namespace MyClassroom.Models
         public List<Student>? Students {get; set;}
         public List<Homework>? Homeworks { get; set; }
 
-        
-        
+              
 
 
     }

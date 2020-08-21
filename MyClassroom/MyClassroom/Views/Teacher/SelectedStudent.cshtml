@@ -32,30 +32,104 @@
 </div>
 
 <div class="float-container">
-    <div class="float-child">
-        <div class="green">Positive</div>
+    <div>
+        <div class="float-child">
+            <div class="green">Positive</div>
+            <table class="table table-hover" id="students">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Description</th>
+                        <th scope="col">Point</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var skill in Model.Skills)
+                    {
+                        if (skill.Point > 0)
+                        {
+                            <tr style="cursor:pointer">
+                                <th scope="row">
+                                    <input type="checkbox" name="selectedId" value="@skill.Id" />
+                                </th>
+                                <td>@skill.Description</td>
+                                <td>@skill.Point</td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+            <div style="text-align:center" ;>
 
-    </div>
-    <div class="float-child">
-        <div class="blue">Needs Work</div>
-    </div>
-</div>
-<div class="float-container">
-    <div class="float-child">
-        <div class="containeer">
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-                Add Positive
-            </button>
+                <button type="button" class="btn btn-primary">
+                    Add Positive
+                </button>
+            </div>
         </div>
-    </div>
-    <div class="float-child">
-        <div class="containeer">
-            <button type="button" class="btn btn-primary" data-toggle="modal1" data-target="#exampleModal">
-                Add Needs Work
-            </button>
 
+            <div class="float-child">
+                <div class="blue">Needs Work</div>
+                <table class="table table-hover" id="students">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Description</th>
+                            <th scope="col">Point</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var skill in Model.Skills)
+                        {
+                            if (skill.Point < 0)
+                            {
+                                <tr style="cursor:pointer">
+                                    <th scope="row">
+                                        <input type="checkbox" name="selectedId" value="@skill.Id" />
+                                    </th>
+                                    <td>@skill.Description</td>
+                                    <td>@skill.Point</td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+                <div style="text-align:center" ;>
+                    <button type="button" class="btn btn-primary">
+                        Add Needs Work
+                    </button>
+                </div>
+            </div>
         </div>
-    </div>
-    
-
 </div>
+
+    @*<div class="float-container">
+        <div class="float-child">
+            <div class="containeer">
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                    Add Positive
+                </button>
+            </div>
+        </div>
+        <div class="float-child">
+            <div class="containeer">
+                <button type="button" class="btn btn-primary" data-toggle="modal1" data-target="#exampleModal">
+                    Add Needs Work
+                </button>
+
+            </div>
+        </div>
+    </div>*@
+
+
+
+
+<script>
+    const allTr = document.querySelectorAll("#students tbody tr");
+    for (const tr of allTr) {
+        tr.onclick = function (event) {
+            if (event.target.localName === "input") return;
+            event.preventDefault();
+            this.querySelector("input").checked = !this.querySelector("input").checked;
+        };
+    }
+</script>

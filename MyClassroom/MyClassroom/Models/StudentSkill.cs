@@ -11,6 +11,8 @@
 
         [ForeignKey("StudentId")]
         public int StudentId { get; set; }
+        [ForeignKey("SkillId")]
+        public int SkillId { get; set; }
         [ForeignKey("ClassId")]
         public int ClassId { get; set; }
         public int Point { get; set; }

@@ -27,7 +27,6 @@ namespace MyClassroom.Controllers
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             viewmodel.Teacher = _context.Teachers.Where(t => t.IdentityUserId == userId).FirstOrDefault();
 
-
             if (viewmodel.Teacher == null)
             {
                 return RedirectToAction("Create");
@@ -61,6 +60,7 @@ namespace MyClassroom.Controllers
             TeacherStudenViewModel student = new TeacherStudenViewModel();
             student.Student = _context.Students.Where(s => s.Id == id).FirstOrDefault();
             student.Classroom = _context.Classroom.Where(c => c.Id == student.Student.ClassId).FirstOrDefault();
+            student.Skills = _context.Skill.Where(sk => sk.ClassId == 0).ToList();
             //var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             //classroom.Teacher = _context.Teachers.Where(t => t.IdentityUserId == userId).FirstOrDefault();
             //classroom.AllStudents = _context.Students.ToList();
@@ -79,7 +79,7 @@ namespace MyClassroom.Controllers
             classroom.AllStudents = _context.Students.ToList();
             classroom.Students = _context.Students.Where(c => c.ClassId == id).ToList();
             classroom.Classroom = _context.Classroom.Where(cs => cs.Id == id).FirstOrDefault();
-            classroom.Points = _context.Points.Where(p => p.TeacherId == classroom.Teacher.Id).ToList();
+            //classroom.Points = _context.Points.Where(p => p.TeacherId == classroom.Teacher.Id).ToList();
             classroom.Homework = _context.Homeworks.Where(hw => hw.ClassId == id && hw.Date == DateTime.Now.Date).FirstOrDefault();
             return View(classroom);
         }
@@ -352,17 +352,17 @@ namespace MyClassroom.Controllers
             return _context.Teachers.Any(e => e.Id == id);
         }
 
-        public int CalculateTotalPoint(List<Points> Points)
-        {
-            int totalPoint = 0;
+        //public int CalculateTotalPoint()
+        //{
+        //    int totalPoint = 0;
 
-            for (int i = 0; i < Points.Count; i++)
-            {
-                totalPoint += Points[i].Point;
-            }
+        //    for (int i = 0; i < Points.Count; i++)
+        //    {
+        //        totalPoint += Points[i].Point;
+        //    }
 
 
-            return totalPoint;
-        }
+        //    return totalPoint;
+        //}
     }
 }

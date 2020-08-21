@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace MyClassroom.Migrations
 {
-    public partial class migration : Migration
+    public partial class initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -58,6 +58,21 @@ namespace MyClassroom.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Classroom", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Skill",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Description = table.Column<string>(nullable: true),
+                    ClassId = table.Column<int>(nullable: false),
+                    Point = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Skill", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -312,22 +327,22 @@ namespace MyClassroom.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Points",
+                name: "StudentSkill",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     StudentId = table.Column<int>(nullable: false),
-                    TeacherId = table.Column<int>(nullable: false),
-                    Behavior = table.Column<string>(nullable: true),
-                    Time = table.Column<DateTime>(nullable: false),
-                    Point = table.Column<int>(nullable: false)
+                    SkillId = table.Column<int>(nullable: false),
+                    ClassId = table.Column<int>(nullable: false),
+                    Point = table.Column<int>(nullable: false),
+                    Date = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Points", x => x.Id);
+                    table.PrimaryKey("PK_StudentSkill", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Points_Students_StudentId",
+                        name: "FK_StudentSkill_Students_StudentId",
                         column: x => x.StudentId,
                         principalTable: "Students",
                         principalColumn: "Id",
@@ -339,10 +354,10 @@ namespace MyClassroom.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "ef471860-1ef7-460f-9e59-d51e3d5f695d", "0a0da742-b7f8-4c13-9468-2063e20dea30", "Admin", "ADMIN" },
-                    { "76ee9b34-ba52-4b97-9d00-44dc99d8a35e", "801e0b62-7247-4c70-8a6d-58edab070b3b", "Teacher", "TEACHER" },
-                    { "8cb20acd-97ab-4e7b-b0a7-0dd36d85d344", "f6dfb8e7-f73b-4704-83a3-e8817f301d78", "Parent", "PARENT" },
-                    { "3dcfb6ba-c72d-45a9-b9ff-b27c3b49f0c6", "2ac12643-29b9-4f4d-a00c-e9dd867ee332", "Student", "STUDENT" }
+                    { "5359c7f6-00fd-4571-b963-1b34598c9686", "1efa4e47-7ea6-4844-8547-6fdd10785614", "Admin", "ADMIN" },
+                    { "8a3b3290-d91a-4d18-be44-a333bb01801b", "04c4f01e-1868-4b36-8bf7-ead5ea13fc46", "Teacher", "TEACHER" },
+                    { "44c4dec7-8203-4725-aac3-d97f9a19fcf7", "c956d090-2c8d-442a-bb2b-10eb9ee551b0", "Parent", "PARENT" },
+                    { "c8275458-9014-40b5-b69c-28032751b1a3", "93cc6eda-d48c-4407-9918-f7897e722b1a", "Student", "STUDENT" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -410,11 +425,6 @@ namespace MyClassroom.Migrations
                 column: "IdentityUserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Points_StudentId",
-                table: "Points",
-                column: "StudentId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Students_ClassroomId",
                 table: "Students",
                 column: "ClassroomId");
@@ -423,6 +433,11 @@ namespace MyClassroom.Migrations
                 name: "IX_Students_IdentityUserId",
                 table: "Students",
                 column: "IdentityUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_StudentSkill_StudentId",
+                table: "StudentSkill",
+                column: "StudentId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Teachers_IdentityUserId",
@@ -460,7 +475,10 @@ namespace MyClassroom.Migrations
                 name: "Parents");
 
             migrationBuilder.DropTable(
-                name: "Points");
+                name: "Skill");
+
+            migrationBuilder.DropTable(
+                name: "StudentSkill");
 
             migrationBuilder.DropTable(
                 name: "Teachers");

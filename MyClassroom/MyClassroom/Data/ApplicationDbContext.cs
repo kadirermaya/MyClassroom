@@ -48,9 +48,12 @@ namespace MyClassroom.Data
         public DbSet<Models.Parent> Parents { get; set; }
         public DbSet<Models.Student> Students { get; set; }
         public DbSet<Models.Homework> Homeworks { get; set; }
-        public DbSet<Models.Points> Points { get; set; }
-        public DbSet<MyClassroom.Models.DailyNote> DailyNotes { get; set; }
-        public DbSet<MyClassroom.Models.Classroom> Classroom { get; set; }
+        public DbSet<Models.DailyNote> DailyNotes { get; set; }
+        public DbSet<Models.Classroom> Classroom { get; set; }
+        public DbSet<Models.StudentSkill> StudentSkill { get; set; }
+        public DbSet<Models.Skill> Skill { get; set; }
+
+
 
 
     }
