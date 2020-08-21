@@ -15,29 +15,26 @@
         float: left;
         padding: 20px;
     }
+    #divHead {
+        text-align:center;
+    }
 </style>
 
 
 <br />
 <h5>Classroom: @Model.Classroom.Name</h5>
-<h4>Student: @Model.Student.FirstName @Model.Student.LastName</h4>
-<h4>Student: @Model.Student.Point</h4>
 <a class="badge badge-secondary" asp-action="SelectedClassroom" asp-route-id="@Model.Classroom.Id">Back to @Model.Classroom.Name</a>
 
-<div class="containeer" style="text-align:center">
-    <form asp-action="TeacherChat" method="post" enctype="multipart/form-data" asp-controller="Teacher">
 
-        <div>
-            <button type="submit" class="btn btn-primary" asp-action="TeacherChat" asp-route-id="@Model.Classroom.Id">Send Message to Parent</button>
-        </div>
-
-    </form>
+<div id="divHead">
+        <h4>@Model.Student.FirstName @Model.Student.LastName</h4>
+        <h4>Point: @Model.Student.Point</h4>
 </div>
 
 <div class="float-container">
     <div>
         <div class="float-child">
-            <div class="green">Positive</div>
+            <div class="badge badge-success">Positive</div>
             <form asp-action="AddPoints" method="post" enctype="multipart/form-data" asp-controller="Teacher">
                 <table class="table table-hover table-success" id="students">
                     <thead>
@@ -73,7 +70,7 @@
         </div>
 
         <div class="float-child">
-            <div class="blue">Needs Work</div>
+            <div class="badge badge-secondary">Needs Work</div>
             <form asp-action="AddPoints" method="post" enctype="multipart/form-data" asp-controller="Teacher">
 
                 <table class="table table-hover table-secondary" id="students">
@@ -110,24 +107,15 @@
     </div>
 </div>
 
-@*<div class="float-container">
-        <div class="float-child">
-            <div class="containeer">
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-                    Add Positive
-                </button>
-            </div>
-        </div>
-        <div class="float-child">
-            <div class="containeer">
-                <button type="button" class="btn btn-primary" data-toggle="modal1" data-target="#exampleModal">
-                    Add Needs Work
-                </button>
+<div class="containeer" style="text-align:center">
+    <form asp-action="TeacherChat" method="post" enctype="multipart/form-data" asp-controller="Teacher">
 
-            </div>
+        <div>
+            <button type="submit" class="btn btn-primary" asp-action="TeacherChat" asp-route-id="@Model.Classroom.Id">Send Message to Parent</button>
         </div>
-    </div>*@
 
+    </form>
+</div>
 
 
 

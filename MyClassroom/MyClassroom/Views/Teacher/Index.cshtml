@@ -12,24 +12,19 @@
     .butt {
         width: 200px;
         height: 200px;
-      
     }
 </style>
-    <br />
+
+<br />
     <h1>Hello @Model.Teacher.FirstName</h1>
 <br />
 
-<div class="container">
-    <button type="button" value="Create" class="btn btn-secondary" onclick="location.href='@Url.Action("CreateClassroom", "Teacher")'">Create Class</button>
-
-</div>
-<br />
 <div class="row">
-    @foreach (var item in Model.MyClassrooms)
-    {
-        <a type="button" class="btn btn-primary btn-lg butt" asp-action="SelectedClassroom" asp-route-id="@item.Id">@item.Name</a>
-    
-    }
+        <a value="Create" class="btn btn-primary btn-lg butt" asp-action="CreateClassroom">Create Class</a>
+        @foreach (var item in Model.MyClassrooms)
+        {
+            <a type="button" class="btn btn-primary btn-lg butt" asp-action="SelectedClassroom" asp-route-id="@item.Id">@item.Name</a>
+        }
 </div>
 
 

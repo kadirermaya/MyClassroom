@@ -144,7 +144,15 @@ namespace MyClassroom.Controllers
                 var skill = _context.Skill.FirstOrDefault(s => s.Id == skillId);
                 if (skill != null)
                 {
+                    StudentSkill studentSkill = new StudentSkill();
+                    studentSkill.ClassId = student.ClassId;
+                    studentSkill.Date = DateTime.Now.Date;
+                    studentSkill.Point = skill.Point;
+                    studentSkill.SkillId = skill.Id;
+                    studentSkill.StudentId = student.Id;
+
                     student.Point += skill.Point;
+                    _context.StudentSkill.Add(studentSkill);
                     _context.Students.Update(student);
                 }
             }
