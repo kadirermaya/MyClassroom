@@ -126,6 +126,34 @@ namespace MyClassroom.Controllers
 
         }
 
+        [HttpGet]
+        public IActionResult AddPoints()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult AddPoints(int id, [FromForm(Name = "selectedSkill")] List<int> selectedSkills)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var student = _context.Students.FirstOrDefault(x => x.Id == id);
+
+            foreach (var skillId in selectedSkills)
+            {
+                var skill = _context.Skill.FirstOrDefault(s => s.Id == skillId);
+                if (skill != null)
+                {
+                    student.Point += skill.Point;
+                    _context.Students.Update(student);
+                }
+            }
+            
+            _context.SaveChanges();
+            return RedirectToAction(nameof(SelectedStudent), new { id });
+
+        }
+
         //public IActionResult AssignHomework()
         //{
         //    return View();

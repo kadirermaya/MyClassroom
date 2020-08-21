@@ -6,6 +6,8 @@
 <br />
 
 <h1>Hello @Model.Teacher.FirstName</h1>
+<a class="badge badge-secondary" asp-action="Index">Back to Classrooms</a>
+
 
 <h3 style="text-align:center">@Model.Classroom.Name</h3>
 
@@ -39,7 +41,7 @@
 <div class="modal fade" id="addStudentModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form asp-action="AddStudent" method="post" enctype="multipart/form-data" asp-controller="TeacherController">
+            <form asp-action="AddStudent" method="post" enctype="multipart/form-data" asp-controller="Teacher">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -81,7 +83,7 @@
 <div class="modal fade" id="attendanceModal" tabindex="-1" aria-labelledby="attendanceModal" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form asp-action="Attendance" method="post" enctype="multipart/form-data" asp-controller="TeacherController">
+            <form asp-action="Attendance" method="post" enctype="multipart/form-data" asp-controller="Teacher">
                 <div class="modal-header">
                     <h5 class="modal-title" id="attendanceModal">Attendance</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
