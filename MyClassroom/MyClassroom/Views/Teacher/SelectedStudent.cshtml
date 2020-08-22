@@ -7,14 +7,14 @@
 <style>
     .float-container {
         border: 3px solid #fff;
-        padding: 20px;
-    }
+/*        padding: 20px;
+*/    }
 
     .float-child {
         width: 50%;
         float: left;
-        padding: 20px;
-    }
+        padding: 10px;
+/**/    }
 
     #divHead {
         text-align: center;
@@ -27,24 +27,110 @@
 <a class="badge badge-secondary" asp-action="SelectedClassroom" asp-route-id="@Model.Classroom.Id">Back to @Model.Classroom.Name</a>
 
 
-<div id="divHead">
-    <h4>@Model.Student.FirstName @Model.Student.LastName</h4>
-    <h4>Point: @Model.Student.Point</h4>
+<div class="card">
+    <div class="card-header">
+        <div id="divHead">
+            <h4>@Model.Student.FirstName @Model.Student.LastName</h4>
+            <h4>Point: @Model.Student.Point</h4>
+        </div>
+        <div class="containeer single-line" style="text-align:center">
+            <form asp-action="RedeemPoints" asp-controller="Teacher" asp-route-id="@Model.Student.Id" method="post">
+                <button type="submit" class="btn btn-primary" data-toggle="modal">Redeem Points</button>
+            </form>
+
+            <form asp-action="TeacherChat" method="post" enctype="multipart/form-data" asp-controller="Teacher">
+                <button type="submit" class="btn btn-primary" asp-action="TeacherChat" asp-route-id="@Model.Classroom.Id">Send Message to Parent</button>
+            </form>
+
+            <form asp-action="AddDailyNote" asp-controller="Teacher" asp-route-id="@Model.Student.Id" method="post">
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addDailyNoteModal">Add Daily Note</button>
+            </form>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="float-container">
+            <div>
+                <div class="float-child">
+                    <div class="badge badge-success">Positive</div>
+                    <form asp-action="AddPoints" method="post" enctype="multipart/form-data" asp-controller="Teacher">
+                        <table class="table table-hover table-success" id="students">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Description</th>
+                                    <th scope="col">Point</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var skill in Model.Skills)
+                                {
+                                    if (skill.Point > 0)
+                                    {
+                                        <tr style="cursor:pointer">
+                                            <th scope="row">
+                                                <input type="checkbox" name="selectedSkill" value="@skill.Id" />
+                                            </th>
+                                            <td>@skill.Description</td>
+                                            <td>@skill.Point</td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                        <div style="text-align:center" ;>
+
+                            <button type="submit" class="btn btn-success" asp-action="AddPoints" asp-route-id="@Model.Student.Id">
+                                Add Positive
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="float-child">
+                    <div class="badge badge-secondary">Needs Work</div>
+                    <form asp-action="AddPoints" method="post" enctype="multipart/form-data" asp-controller="Teacher">
+
+                        <table class="table table-hover table-secondary" id="students">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Description</th>
+                                    <th scope="col">Point</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var skill in Model.Skills)
+                                {
+                                    if (skill.Point < 0)
+                                    {
+                                        <tr style="cursor:pointer">
+                                            <th scope="row">
+                                                <input type="checkbox" name="selectedSkill" value="@skill.Id" />
+                                            </th>
+                                            <td>@skill.Description</td>
+                                            <td>@skill.Point</td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                        <div style="text-align:center" ;>
+                            <button type="submit" class="btn btn-secondary" asp-action="AddPoints" asp-route-id="@Model.Student.Id">
+                                Add Needs Work
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
-<div class="containeer single-line" style="text-align:center">
-    <form asp-action="RedeemPoints" asp-controller="Teacher" asp-route-id="@Model.Student.Id" method="post">
-        <button type="submit" class="btn btn-primary" data-toggle="modal">Redeem Points</button>
-    </form>
 
-    <form asp-action="TeacherChat" method="post" enctype="multipart/form-data" asp-controller="Teacher">
-        <button type="submit" class="btn btn-primary" asp-action="TeacherChat" asp-route-id="@Model.Classroom.Id">Send Message to Parent</button>
-    </form>
 
-    <form asp-action="AddDailyNote" asp-controller="Teacher" asp-route-id="@Model.Student.Id" method="post">
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addDailyNoteModal">Add Daily Note</button>
-    </form>
-</div>
+
+
+
 
 
 <!--addStudentModal Homework -->
@@ -75,81 +161,7 @@
     </div>
 </div>
 
-<div class="float-container">
-    <div>
-        <div class="float-child">
-            <div class="badge badge-success">Positive</div>
-            <form asp-action="AddPoints" method="post" enctype="multipart/form-data" asp-controller="Teacher">
-                <table class="table table-hover table-success" id="students">
-                    <thead>
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Description</th>
-                            <th scope="col">Point</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var skill in Model.Skills)
-                        {
-                            if (skill.Point > 0)
-                            {
-                                <tr style="cursor:pointer">
-                                    <th scope="row">
-                                        <input type="checkbox" name="selectedSkill" value="@skill.Id" />
-                                    </th>
-                                    <td>@skill.Description</td>
-                                    <td>@skill.Point</td>
-                                </tr>
-                            }
-                        }
-                    </tbody>
-                </table>
-                <div style="text-align:center" ;>
 
-                    <button type="submit" class="btn btn-success" asp-action="AddPoints" asp-route-id="@Model.Student.Id">
-                        Add Positive
-                    </button>
-                </div>
-            </form>
-        </div>
-
-        <div class="float-child">
-            <div class="badge badge-secondary">Needs Work</div>
-            <form asp-action="AddPoints" method="post" enctype="multipart/form-data" asp-controller="Teacher">
-
-                <table class="table table-hover table-secondary" id="students">
-                    <thead>
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Description</th>
-                            <th scope="col">Point</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var skill in Model.Skills)
-                        {
-                            if (skill.Point < 0)
-                            {
-                                <tr style="cursor:pointer">
-                                    <th scope="row">
-                                        <input type="checkbox" name="selectedSkill" value="@skill.Id" />
-                                    </th>
-                                    <td>@skill.Description</td>
-                                    <td>@skill.Point</td>
-                                </tr>
-                            }
-                        }
-                    </tbody>
-                </table>
-                <div style="text-align:center" ;>
-                    <button type="submit" class="btn btn-secondary" asp-action="AddPoints" asp-route-id="@Model.Student.Id">
-                        Add Needs Work
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
 
 
 
