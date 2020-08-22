@@ -52,6 +52,7 @@ namespace MyClassroom.Data
         public DbSet<Models.Classroom> Classroom { get; set; }
         public DbSet<Models.StudentSkill> StudentSkill { get; set; }
         public DbSet<Models.Skill> Skill { get; set; }
+        public DbSet<Models.Attendance> Attendances { get; set; }
 
 
 

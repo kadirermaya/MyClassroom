@@ -38,17 +38,16 @@ namespace MyClassroom.Controllers
             return View(viewmodel);
         }
 
-        public ActionResult TeacherChat(int id)
+        public ActionResult TeacherChat()
         {
             TeacherStudenViewModel viewmodel = new TeacherStudenViewModel();
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             viewmodel.Teacher = _context.Teachers.Where(t => t.IdentityUserId == userId).FirstOrDefault();
-            viewmodel.Student = _context.Students.Where(t => t.Id == id).FirstOrDefault();
-            viewmodel.Parent = _context.Parents.Where(t => t.Id == viewmodel.Student.ParentId).FirstOrDefault();
+            //viewmodel.Student = _context.Students.Where(t => t.Id == id).FirstOrDefault();
+            //viewmodel.Parent = _context.Parents.Where(t => t.Id == viewmodel.Student.ParentId).FirstOrDefault();
 
             if (viewmodel.Student == null)
             {
-                return RedirectToAction("SelectedClassroom");
 
             }
 
@@ -175,6 +174,7 @@ namespace MyClassroom.Controllers
                     StudentSkill studentSkill = new StudentSkill();
                     studentSkill.ClassId = student.ClassId;
                     studentSkill.Date = DateTime.Now.Date;
+                    studentSkill.Description = skill.Description;
                     studentSkill.Point = skill.Point;
                     studentSkill.SkillId = skill.Id;
                     studentSkill.StudentId = student.Id;
@@ -416,17 +416,6 @@ namespace MyClassroom.Controllers
             return _context.Teachers.Any(e => e.Id == id);
         }
 
-        //public int CalculateTotalPoint()
-        //{
-        //    int totalPoint = 0;
-
-        //    for (int i = 0; i < Points.Count; i++)
-        //    {
-        //        totalPoint += Points[i].Point;
-        //    }
-
-
-        //    return totalPoint;
-        //}
+    
     }
 }

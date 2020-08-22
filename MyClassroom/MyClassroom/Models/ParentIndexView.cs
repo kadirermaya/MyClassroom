@@ -10,10 +10,10 @@ namespace MyClassroom.Models
         public Student Student { get; set; }
         public Parent Parent { get; set; }
         public Teacher Teacher { get; set; }
-        public List<Attendance> Attendances { get; set; }
-        public List<Homework> Homeworks { get; set; }
-        public List<StudentSkill> StudentSkills { get; set; }
-        public DailyNote DailyNote { get; set; }
+        public List<Attendance>? Attendances { get; set; }
+        public Homework Homeworks { get; set; }
+        public List<StudentSkill>? StudentSkills { get; set; }
+        public DailyNote? DailyNote { get; set; }
 
 
     }

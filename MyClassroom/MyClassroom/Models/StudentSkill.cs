@@ -15,6 +15,7 @@
         public int SkillId { get; set; }
         [ForeignKey("ClassId")]
         public int ClassId { get; set; }
+        public string Description { get; set; }
         public int Point { get; set; }
         public DateTime Date { get; set; }
     }

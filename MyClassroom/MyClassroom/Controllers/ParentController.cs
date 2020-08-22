@@ -23,25 +23,29 @@ namespace MyClassroom.Controllers
         // GET: Parents
         public IActionResult Index()
         {
-            //ParentIndexView parentIndex = new ParentIndexView();
+            ParentIndexView parentIndex = new ParentIndexView();
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var parent = _context.Parents.Where(p => p.IdentityUserId == userId).FirstOrDefault();
-            if (parent == null)
+            parentIndex.Parent = _context.Parents.Where(p => p.IdentityUserId == userId).FirstOrDefault();
+            if (parentIndex.Parent == null)
             {
                 return RedirectToAction("Create");
             }
-            //parentIndex.Parent = _context.Parents.Where(c => c.IdentityUserId == userId).FirstOrDefault();
-            //parentIndex.Student = _context.Students.Where(s => s.ParentId == parentIndex.Parent.Id).FirstOrDefault();
-            //parentIndex.DailyNote = _context.DailyNotes.Where(d => d.StudentId == parentIndex.Student.Id && d.Date == DateTime.Now.Date).FirstOrDefault();
+            parentIndex.Student = _context.Students.Where(s => s.ParentId == parentIndex.Parent.Id).FirstOrDefault();
+            parentIndex.DailyNote = _context.DailyNotes.Where(d => d.StudentId == parentIndex.Student.Id && d.Date == DateTime.Now.Date).FirstOrDefault();
+            parentIndex.Teacher = _context.Teachers.Where(s => s.Id == parentIndex.Student.Id).FirstOrDefault();
+            parentIndex.DailyNote = _context.DailyNotes.Where(d => d.StudentId == parentIndex.Student.Id && d.Date == DateTime.Now.Date).FirstOrDefault();
+            parentIndex.StudentSkills = _context.StudentSkill.Where(sk => sk.StudentId == parentIndex.Student.Id && sk.Date == DateTime.Now.Date).ToList();
 
-            return View(parent);
+            parentIndex.Homeworks = _context.Homeworks.Where(h => h.ClassId == parentIndex.Student.ClassId && h.Date == DateTime.Now.Date).FirstOrDefault();
+
+            return View(parentIndex);
         }
 
         public IActionResult ParentChat()
         {
+            TeacherStudenViewModel viewmodel = new TeacherStudenViewModel();
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             var parent = _context.Parents.Where(c => c.IdentityUserId == userId).FirstOrDefault();
-            TeacherStudenViewModel viewmodel = new TeacherStudenViewModel();
             viewmodel.Teacher = _context.Teachers.Where(t => t.IdentityUserId == userId).FirstOrDefault();
             viewmodel.Student = _context.Students.Where(t => t.Id == parent.Id).FirstOrDefault();
             viewmodel.Parent = _context.Parents.Where(t => t.Id == viewmodel.Student.ParentId).FirstOrDefault();
@@ -53,6 +57,23 @@ namespace MyClassroom.Controllers
             }
 
             return View(viewmodel);
+        }
+
+
+        public ActionResult Attendance()
+        {
+            AttendanceView attendanceView = new AttendanceView();
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            attendanceView.Parent = _context.Parents.Where(c => c.IdentityUserId == userId).FirstOrDefault();
+            attendanceView.Student = _context.Students.Where(s => s.ParentId == attendanceView.Parent.Id).FirstOrDefault();
+            //attendanceView.Attendances = _context.Attendances.Where(a => a.StudentId == attendanceView.Student.Id).ToList();
+
+            var startDate = DateTime.Now.Date.AddMonths(-1); // 2020-08-19 00:00
+            var endDate = DateTime.Now.Date; // +1 = 2020-08-20 00:00 // -1 ms => 2020-08-19 23:59:59 99999
+
+            attendanceView.Attendances = _context.Attendances.Where(x => x.Date >= startDate && x.Date <= endDate).ToList();
+
+            return View(attendanceView);
         }
 
         // GET: Parents/Details/5
@@ -94,11 +115,12 @@ namespace MyClassroom.Controllers
             {
                 return RedirectToAction(nameof(Create));
             }
-            student.ParentId = parent.Id;
 
+            _context.Parents.Add(parent);
             _context.Students.Update(student);
-            _context.Add(parent);
             _context.SaveChanges();
+
+            UpdateParentId(student, parent.Id);
 
             return RedirectToAction(nameof(Index));
         }
@@ -191,16 +213,11 @@ namespace MyClassroom.Controllers
             return _context.Parents.Any(e => e.Id == id);
         }
 
-        //public void UpdateParentId(string firstName, string lastName, int ParentId)
-        //{
-        //    var student = _context.Students.Where(s => s.FirstName == firstName && s.LastName == lastName).FirstOrDefault();
-        //    if(student == null)
-        //    {
-
-        //    }
-        //    student.ParentId = ParentId;
-        //    _context.Students.Update(student);
-        //    _context.SaveChanges();
-        //}
+        public void UpdateParentId(Student student, int ParentId)
+        {
+            student.ParentId = ParentId;
+            _context.Students.Update(student);
+            _context.SaveChanges();
+        }
     }
 }

@@ -13,7 +13,8 @@ namespace MyClassroom.Models
         public int Id { get; set; }
         [ForeignKey("StudentId")]
         public int StudentId { get; set; }
-        public string? Description { get; set; }
+        public string Description { get; set; }
         public DateTime Date { get; set;   }
+
     }
 }

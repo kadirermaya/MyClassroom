@@ -5,12 +5,12 @@
 }
 
 <style>
-    .btn {
+    #butt .btn {
         margin-left: 10px;
         margin-bottom: 10px;
     }
 
-    .butt {
+    #butt .butt {
         width: 200px;
         height: 200px;
     }
@@ -20,7 +20,7 @@
 <h1>Hello @Model.Teacher.FirstName</h1>
 <br />
 
-<div class="row">
+<div class="row" id="butt">
 
 
     <form asp-action="CreateClassroom" asp-controller="Teacher" method="post">

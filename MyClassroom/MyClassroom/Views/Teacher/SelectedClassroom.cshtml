@@ -4,12 +4,15 @@
     ViewData["Title"] = "SelectedClassroom";
 }
 <style>
-    .btn {
-        margin: 10px 10px 10px 0;
-        margin-bottom: 10px;
+    #butt {
+        margin: 20px 10px 20px 0;
     }
 
-    .butt {
+    #btn {
+        margin: 20px 10px 20px 0;
+    }
+
+    #butt .butt {
         width: 200px;
         height: 200px;
     }
@@ -19,13 +22,13 @@
 <h1>Hello @Model.Teacher.FirstName</h1>
 <a class="badge badge-secondary" asp-action="Index">Back to Classrooms</a>
 
-<br/>
+<br />
 <br />
 <h3 style="text-align:center">@Model.Classroom.Name</h3>
 
 
-<!-- Button trigger modal -->
-<div class="containeer single-line" style="text-align:center">
+ @*Button trigger modal*@ 
+<div class="containeer single-line" id="btn" style="text-align:center">
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addStudentModal">Add Student</button>
     <form asp-action="ResetAllPoints" asp-controller="Teacher" asp-route-id="@Model.Classroom.Id" method="post">
         <button type="submit" class="btn btn-primary" data-toggle="modal">Reset All Points</button>
@@ -37,7 +40,7 @@
 
 </div>
 
-<!--Add Student Modal -->
+@*Add Student Modal*@ 
 <div class="modal fade" id="addStudentModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -79,7 +82,7 @@
         </div>
     </div>
 </div>
-<!--Attendance Modal -->
+@*Attendance Modal*@ 
 <div class="modal fade" id="attendanceModal" tabindex="-1" aria-labelledby="attendanceModal" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -121,7 +124,7 @@
         </div>
     </div>
 </div>
-<!--createHomeworkModal Homework -->
+@*createHomeworkModal Homework*@ 
 <div class="modal fade" id="createHomeworkModal" tabindex="-1" aria-labelledby="createHomeworkModal" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -155,66 +158,67 @@
 
 @if (Model.Students.Count != 0)
 {
-<div class="container">
     <div class="container">
-        <div class="row">
-            @foreach (var item in Model.Students)
-            {
-                <div>
-                    <a type="button" class="btn btn-primary btn-lg butt" asp-action="SelectedStudent" asp-route-id="@item.Id"><br />@item.FirstName @item.LastName <br /><br /> Points:<br />@item.Point</a>
-                </div>
-            }
+        <div class="container">
+            <div class="row">
+                @foreach (var item in Model.Students)
+                {
+                    <div id="butt">
+                        <a type="button" class="btn btn-primary btn-lg" asp-action="SelectedStudent" asp-route-id="@item.Id"><br />@item.FirstName @item.LastName <br /><br /> Points:<br />@item.Point</a>
+                    </div>
+                }
+            </div>
         </div>
     </div>
-</div>
-    }
-    @if (Model.Students.Count == 0)
-    {
-        <div class="container" style="text-align:center">
+}
 
-            <div class="card text-white bg-primary mb-3">
-                <div class="card-body">
-                    <h4 class="card-title">You didn't add any student in @Model.Classroom.Name!</h4>
-                    <p class="card-text">Click <strong>Add Student</strong> button in order to start MyClassroom.</p>
-                </div>
+@if (Model.Students.Count == 0)
+{
+    <div class="container" style="text-align:center">
+
+        <div class="card text-white bg-primary mb-3">
+            <div class="card-body">
+                <h4 class="card-title">You didn't add any student in @Model.Classroom.Name!</h4>
+                <p class="card-text">Click <strong>Add Student</strong> button in order to start MyClassroom.</p>
             </div>
         </div>
-    }
+    </div>
+}
 
-    @if (Model.Homework != null)
-    {
-        <div class="container" style="text-align:center">
-            <div class="card text-white bg-danger mb-3">
-                <div class="card-header">Today's Homework</div>
-                <div class="card-body">
-                    <h4 class="card-title">@Model.Homework.Name</h4>
-                    <p class="card-text">@Model.Homework.Description</p>
-                </div>
+@if (Model.Homework != null)
+{
+    <div class="container" style="text-align:center">
+        <div class="card text-white bg-danger mb-3">
+            <div class="card-header">Today's Homework</div>
+            <div class="card-body">
+                <h4 class="card-title">@Model.Homework.Name</h4>
+                <p class="card-text">@Model.Homework.Description</p>
             </div>
         </div>
+    </div>
 
-    }
-    @if (Model.Homework == null)
-    {
-        <div class="container" style="text-align:center">
-            <div class="card text-white bg-info  mb-3">
-                <div class="card-header">No homework!</div>
-                <div class="card-body">
-                    <h4 class="card-title">Teacher didn't assigned homework yet!</h4>
-                    <p class="card-text"></p>
-                </div>
+}
+@if (Model.Homework == null)
+{
+    <div class="container" style="text-align:center">
+        <div class="card text-white bg-info  mb-3">
+            <div class="card-header">No homework!</div>
+            <div class="card-body">
+                <h4 class="card-title">Teacher didn't assigned homework yet!</h4>
+                <p class="card-text"></p>
             </div>
         </div>
+    </div>
+}
+
+
+<script>
+    const allTr = document.querySelectorAll("#students tbody tr");
+    for (const tr of allTr) {
+        tr.onclick = function (event) {
+            if (event.target.localName === "input") return;
+            event.preventDefault();
+            this.querySelector("input").checked = !this.querySelector("input").checked;
+        };
     }
-
-
-    <script>
-        const allTr = document.querySelectorAll("#students tbody tr");
-        for (const tr of allTr) {
-            tr.onclick = function (event) {
-                if (event.target.localName === "input") return;
-                event.preventDefault();
-                this.querySelector("input").checked = !this.querySelector("input").checked;
-            };
-        }
-    </script>
+</script>

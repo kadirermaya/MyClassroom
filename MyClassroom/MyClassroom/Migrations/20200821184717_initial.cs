@@ -188,8 +188,8 @@ namespace MyClassroom.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     IdentityUserId = table.Column<string>(nullable: true),
-                    FirstName = table.Column<string>(nullable: true),
-                    LastName = table.Column<string>(nullable: true)
+                    FirstName = table.Column<string>(nullable: false),
+                    LastName = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -255,7 +255,7 @@ namespace MyClassroom.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Attendance",
+                name: "Attendances",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -266,9 +266,9 @@ namespace MyClassroom.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Attendance", x => x.Id);
+                    table.PrimaryKey("PK_Attendances", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Attendance_Students_StudentId",
+                        name: "FK_Attendances_Students_StudentId",
                         column: x => x.StudentId,
                         principalTable: "Students",
                         principalColumn: "Id",
@@ -335,6 +335,7 @@ namespace MyClassroom.Migrations
                     StudentId = table.Column<int>(nullable: false),
                     SkillId = table.Column<int>(nullable: false),
                     ClassId = table.Column<int>(nullable: false),
+                    Description = table.Column<string>(nullable: true),
                     Point = table.Column<int>(nullable: false),
                     Date = table.Column<DateTime>(nullable: false)
                 },
@@ -354,10 +355,10 @@ namespace MyClassroom.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "5359c7f6-00fd-4571-b963-1b34598c9686", "1efa4e47-7ea6-4844-8547-6fdd10785614", "Admin", "ADMIN" },
-                    { "8a3b3290-d91a-4d18-be44-a333bb01801b", "04c4f01e-1868-4b36-8bf7-ead5ea13fc46", "Teacher", "TEACHER" },
-                    { "44c4dec7-8203-4725-aac3-d97f9a19fcf7", "c956d090-2c8d-442a-bb2b-10eb9ee551b0", "Parent", "PARENT" },
-                    { "c8275458-9014-40b5-b69c-28032751b1a3", "93cc6eda-d48c-4407-9918-f7897e722b1a", "Student", "STUDENT" }
+                    { "821f024a-ab2e-49e8-ae00-78bc7e618a71", "a6daa771-0c02-4e2d-aa66-6f02db0d8913", "Admin", "ADMIN" },
+                    { "d01d82ac-8967-4a44-b2f1-3262e7cd36b2", "2b287d90-9a68-42df-852d-de89e6a7260e", "Teacher", "TEACHER" },
+                    { "b40e01f0-6393-457c-a323-3eca2a17b72f", "9360832e-87db-495e-ab6f-1778e7bc4555", "Parent", "PARENT" },
+                    { "0d53f548-9a76-49d0-bdb9-2823dd693e7b", "1f32dff5-ae7e-491b-b7a7-7cf6247ff1c5", "Student", "STUDENT" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -400,8 +401,8 @@ namespace MyClassroom.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Attendance_StudentId",
-                table: "Attendance",
+                name: "IX_Attendances_StudentId",
+                table: "Attendances",
                 column: "StudentId");
 
             migrationBuilder.CreateIndex(
@@ -463,7 +464,7 @@ namespace MyClassroom.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Attendance");
+                name: "Attendances");
 
             migrationBuilder.DropTable(
                 name: "DailyNotes");

@@ -1,3 +1,30 @@
 ﻿@{
     Layout = "_Layout";
 }
+
+@{
+    if (this.User.IsInRole("Admin") || !this.User.Identity.IsAuthenticated)
+    {
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+
+    else if (this.User.IsInRole("Parent") || !this.User.Identity.IsAuthenticated)
+    {
+        Layout = "~/Views/Shared/_LayoutParent.cshtml";
+    }
+
+    else if (this.User.IsInRole("Teacher") || !this.User.Identity.IsAuthenticated)
+    {
+        Layout = "~/Views/Shared/_LayoutTeacher.cshtml";
+    }
+
+    else if (this.User.IsInRole("Student") || !this.User.Identity.IsAuthenticated)
+    {
+        Layout = "~/Views/Shared/_LayoutStudent.cshtml";
+    }
+
+    else
+    {
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+}
