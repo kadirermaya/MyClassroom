@@ -34,6 +34,22 @@ namespace MyClassroom.Controllers
             return View(student);
         }
 
+        public IActionResult StudentChat()
+        {
+            Student student = new Student();
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            student = _context.Students.Where(c => c.IdentityUserId == userId).FirstOrDefault();
+
+            if (student == null)
+            {
+                return RedirectToAction("Create");
+
+            }
+
+            return View(student);
+        }
+
+
         // GET: Students/Details/5
         public async Task<IActionResult> Details(int? id)
         {

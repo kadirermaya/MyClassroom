@@ -43,8 +43,7 @@ namespace MyClassroom.Controllers
             TeacherStudenViewModel viewmodel = new TeacherStudenViewModel();
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             viewmodel.Teacher = _context.Teachers.Where(t => t.IdentityUserId == userId).FirstOrDefault();
-            //viewmodel.Student = _context.Students.Where(t => t.Id == id).FirstOrDefault();
-            //viewmodel.Parent = _context.Parents.Where(t => t.Id == viewmodel.Student.ParentId).FirstOrDefault();
+            
 
             if (viewmodel.Student == null)
             {
