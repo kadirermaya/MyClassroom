@@ -1,38 +1,48 @@
-﻿@model MyClassroom.Models.Student
+﻿@model MyClassroom.Models.StudentIndexView
 
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+
+<br />
 
 
-<table class="table">
-    <thead>
-        <tr>
-           <th>
-                @Html.DisplayNameFor(model => model.FirstName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LastName)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-          <td>
-                @Html.DisplayFor(modelItem => Model.FirstName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => Model.LastName)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@Model.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@Model.Id">Delete</a>
-            </td>
-        </tr>
+<div class="card card.bg-info">
+    <div class="card-header">
+        <h6 class="text-center">Hello</h6>
+        <h1 class="text-center">@Model.Student.FirstName @Model.Student.LastName</h1>
+        <h4 class="text-center">You have: @Model.Student.Point points!</h4>
 
-    </tbody>
-</table>
+    </div>
+    <div class="card-body">
+        <h6 class="text-center"></h6>
+
+        @if (Model.Homework != null)
+        {
+            <div class="container" style="text-align:center">
+                <div class="card text-white bg-danger mb-3">
+                    <div class="card-header">Today's Homework</div>
+                    <div class="card-body">
+                        <h4 class="card-title">@Model.Homework.Name</h4>
+                        <p class="card-text">@Model.Homework.Description</p>
+                    </div>
+                </div>
+            </div>
+
+        }
+        @if (Model.Homework == null)
+        {
+            <div class="container" style="text-align:center">
+                <div class="card text-white bg-info  mb-3">
+                    <div class="card-header">Yayyyyy! No homework!</div>
+                    <div class="card-body">
+                        <h4 class="card-title">Teacher didn't assigned homework yet!</h4>
+                        <p class="card-text"></p>
+                    </div>
+                </div>
+            </div>
+        }
+
+
+    </div>

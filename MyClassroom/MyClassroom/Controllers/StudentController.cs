@@ -23,30 +23,32 @@ namespace MyClassroom.Controllers
         // GET: Students
         public IActionResult Index()
         {
+            StudentIndexView studentView = new StudentIndexView();
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var student = _context.Students.Where(c => c.IdentityUserId == userId).FirstOrDefault();
+            studentView.Student = _context.Students.Where(c => c.IdentityUserId == userId).FirstOrDefault();
+            studentView.Homework = _context.Homeworks.Where(s => s.ClassId == studentView.Student.ClassId && s.Date == DateTime.Now.Date).FirstOrDefault();
 
-            if (student == null)
+            if (studentView.Student == null)
             {
                 return RedirectToAction("Create");
 
             }
-            return View(student);
+            return View(studentView);
         }
 
         public IActionResult StudentChat()
         {
-            Student student = new Student();
+            TeacherStudenViewModel viewmodel = new TeacherStudenViewModel();
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            student = _context.Students.Where(c => c.IdentityUserId == userId).FirstOrDefault();
+            viewmodel.Student = _context.Students.Where(c => c.IdentityUserId == userId).FirstOrDefault();
 
-            if (student == null)
+            if (viewmodel.Student == null)
             {
                 return RedirectToAction("Create");
 
             }
 
-            return View(student);
+            return View(viewmodel);
         }
 
 
