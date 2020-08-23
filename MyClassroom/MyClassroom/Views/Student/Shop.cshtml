@@ -1,0 +1,105 @@
+﻿@model MyClassroom.Models.Student
+
+@{
+    ViewData["Title"] = "Shop";
+}
+
+<style>
+    .btn-sq-lg {
+        width: 150px !important;
+        height: 150px !important;
+    }
+
+    .btn-sq {
+        width: 100px !important;
+        height: 100px !important;
+        font-size: 10px;
+    }
+
+    .btn-sq-sm {
+        width: 50px !important;
+        height: 50px !important;
+        font-size: 10px;
+    }
+
+    .btn-sq-xs {
+        width: 25px !important;
+        height: 25px !important;
+        padding: 2px;
+    }
+    .col{
+        margin-left: 35px; !important;
+    }
+</style>
+
+
+<br />
+<!------ Include the above in your HEAD tag ---------->
+
+<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+
+<div class="card card.bg-info">
+    <div class="card-header">
+        <h6 class="text-center">Hello</h6>
+        <h1 class="text-center">@Model.FirstName @Model.LastName</h1>
+        <h4 class="text-center">You have: @Model.Point points!</h4>
+
+    </div>
+    <div class="card-body">
+        <h3 class="text-center">You can shop with your Points!</h3>
+
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <p>
+                        <form asp-action="UsePoint" asp-controller="Student" asp-route-id="@Model.Id" method="post">
+                            <button type="submit" asp-action="UsePoint" asp-controller="Student" asp-route-id="@Model.Id" class="btn btn-primary" id="firstButt" value="10" name="point">
+                                <i class="fa fa-user fa-5x"></i><br />
+                                Lunch with Teacher <br>
+                                10 Point
+                            </button>
+                        </form>
+                    </p>
+                </div>
+                <div class="col">
+                    <p>
+                        <form asp-action="UsePoint" asp-controller="Student" asp-route-id="@Model.Id" method="post">
+                            <button type="submit" asp-action="UsePoint" asp-controller="Student" asp-route-id="@Model.Id" class="btn btn-primary" value="10" name="point">
+                                <i class="fa fa-user fa-5x"></i><br />
+                                Buy Mimo Sticker <br>
+                                25 Point
+                            </button>
+                        </form>
+                    </p>
+                </div>
+                <div class="col">
+                    <p>
+                        <form asp-action="UsePoint" asp-controller="Student" asp-route-id="@Model.Id" method="post">
+                            <button type="submit" asp-action="UsePoint" asp-controller="Student" asp-route-id="@Model.Id" class="btn btn-primary" value="35" name="point">
+                                <i class="fa fa-user fa-5x"></i><br />
+                                Get Extra 10 Minute Break <br>
+                                35 Point
+                            </button>
+                        </form>
+                    </p>
+                </div>
+                <div class="col">
+                    <p>
+                        <form asp-action="UsePoint" asp-controller="Student" asp-route-id="@Model.Id" method="post">
+                            <button type="submit" asp-action="UsePoint" asp-controller="Student" asp-route-id="@Model.Id" class="btn btn-primary" value="30" name="point">
+                                <i class="fa fa-user fa-5x"></i><br />
+                                Anything from Treasure Box <br>
+                                30 Point
+                            </button>
+                        </form>
+                    </p>
+                </div>
+
+            </div>
+
+
+        </div>
+    </div>
+
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>

@@ -34,8 +34,8 @@
             <h4>Point: @Model.Student.Point</h4>
         </div>
         <div class="containeer single-line" style="text-align:center">
-            <form asp-action="RedeemPoints" asp-controller="Teacher" asp-route-id="@Model.Student.Id" method="post">
-                <button type="submit" class="btn btn-primary" data-toggle="modal">Redeem Points</button>
+            <form asp-action="RedeemPoints" asp-route-id="@Model.Student.Id" method="post">
+                <button type="submit" class="btn btn-primary" data-toggle="modal"  value="5" name="point">Redeem Points</button>
             </form>
 
             <form asp-action="TeacherChat" method="post" enctype="multipart/form-data" asp-controller="Teacher">

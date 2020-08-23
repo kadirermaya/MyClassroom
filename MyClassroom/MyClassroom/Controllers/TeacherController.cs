@@ -100,6 +100,23 @@ namespace MyClassroom.Controllers
             return View(teacher);
         }
 
+        //public IActionResult RedeemPoint()
+        //{
+        //    return View();
+        //}
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult RedeemPoint(int id, int point)
+        {
+            var student = _context.Students.Where(s => s.Id == id).FirstOrDefault();
+
+            student.Point -= point;
+
+            _context.Students.Update(student);
+            _context.SaveChanges();
+            return RedirectToAction(nameof(SelectedStudent), new { id });
+        }
+
         [HttpGet]
         public IActionResult AddDailyNote()
         {

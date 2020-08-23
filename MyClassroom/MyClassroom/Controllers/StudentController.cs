@@ -36,6 +36,21 @@ namespace MyClassroom.Controllers
             return View(studentView);
         }
 
+        public IActionResult Shop()
+        {
+            Student student = new Student();
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            student = _context.Students.Where(c => c.IdentityUserId == userId).FirstOrDefault();
+            
+
+            if (student == null)
+            {
+                return RedirectToAction("Create");
+
+            }
+            return View(student);
+        }
+
         public IActionResult StudentChat()
         {
             TeacherStudenViewModel viewmodel = new TeacherStudenViewModel();
@@ -177,5 +192,26 @@ namespace MyClassroom.Controllers
         {
             return _context.Students.Any(e => e.Id == id);
         }
+
+        public IActionResult UsePoint()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult UsePoint(int id, int point)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var student = _context.Students.Where(s => s.Id == id).FirstOrDefault();
+
+            student.Point -= point;
+
+            _context.Students.Update(student);
+            _context.SaveChanges();
+            return RedirectToAction("Shop");
+        }
+
+
     }
 }
