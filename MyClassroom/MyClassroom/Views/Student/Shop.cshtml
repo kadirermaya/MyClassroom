@@ -46,59 +46,70 @@
 
     </div>
     <div class="card-body">
-        <h3 class="text-center">You can shop with your Points!</h3>
+        @if (Model.Point <= 10)
+        {
+            <h6 class="text-center">Sorry! You don't have enough Points at this time!</h6>
+            <h6 class="text-center">Keep hard work! Get more points from Teacher!</h6>
+            <div style="display:block">
+                <img src="~/img/sadMinion.png" />
+            </div>
+        }
+        @if (Model.Point >= 10)
+        {
+            <h3 class="text-center">You can shop with your Points!</h3>
 
-        <div class="container">
-            <div class="row">
-                <div class="col">
-                    <p>
-                        <form asp-action="UsePoint" asp-controller="Student" asp-route-id="@Model.Id" method="post">
-                            <button type="submit" asp-action="UsePoint" asp-controller="Student" asp-route-id="@Model.Id" class="btn btn-primary" id="firstButt" value="10" name="point">
-                                <i class="fa fa-user fa-5x"></i><br />
-                                Lunch with Teacher <br>
-                                10 Point
-                            </button>
-                        </form>
-                    </p>
+            <div class="container">
+                <div class="row">
+                    <div class="col">
+                        <p>
+                            <form asp-action="UsePoint" asp-controller="Student" asp-route-id="@Model.Id" method="post">
+                                <button type="submit" asp-action="UsePoint" asp-controller="Student" asp-route-id="@Model.Id" class="btn btn-primary" id="firstButt" value="10" name="point">
+                                    <i class="fa fa-user fa-5x"></i><br />
+                                    Lunch with Teacher <br>
+                                    10 Point
+                                </button>
+                            </form>
+                        </p>
+                    </div>
+                    <div class="col">
+                        <p>
+                            <form asp-action="UsePoint" asp-controller="Student" asp-route-id="@Model.Id" method="post">
+                                <button type="submit" asp-action="UsePoint" asp-controller="Student" asp-route-id="@Model.Id" class="btn btn-primary" value="10" name="point">
+                                    <i class="fa fa-user fa-5x"></i><br />
+                                    Buy Mimo Sticker <br>
+                                    25 Point
+                                </button>
+                            </form>
+                        </p>
+                    </div>
+                    <div class="col">
+                        <p>
+                            <form asp-action="UsePoint" asp-controller="Student" asp-route-id="@Model.Id" method="post">
+                                <button type="submit" asp-action="UsePoint" asp-controller="Student" asp-route-id="@Model.Id" class="btn btn-primary" value="35" name="point">
+                                    <i class="fa fa-user fa-5x"></i><br />
+                                    Get Extra 10 Minute Break <br>
+                                    35 Point
+                                </button>
+                            </form>
+                        </p>
+                    </div>
+                    <div class="col">
+                        <p>
+                            <form asp-action="UsePoint" asp-controller="Student" asp-route-id="@Model.Id" method="post">
+                                <button type="submit" asp-action="UsePoint" asp-controller="Student" asp-route-id="@Model.Id" class="btn btn-primary" value="30" name="point">
+                                    <i class="fa fa-user fa-5x"></i><br />
+                                    Anything from Treasure Box <br>
+                                    30 Point
+                                </button>
+                            </form>
+                        </p>
+                    </div>
+
                 </div>
-                <div class="col">
-                    <p>
-                        <form asp-action="UsePoint" asp-controller="Student" asp-route-id="@Model.Id" method="post">
-                            <button type="submit" asp-action="UsePoint" asp-controller="Student" asp-route-id="@Model.Id" class="btn btn-primary" value="10" name="point">
-                                <i class="fa fa-user fa-5x"></i><br />
-                                Buy Mimo Sticker <br>
-                                25 Point
-                            </button>
-                        </form>
-                    </p>
-                </div>
-                <div class="col">
-                    <p>
-                        <form asp-action="UsePoint" asp-controller="Student" asp-route-id="@Model.Id" method="post">
-                            <button type="submit" asp-action="UsePoint" asp-controller="Student" asp-route-id="@Model.Id" class="btn btn-primary" value="35" name="point">
-                                <i class="fa fa-user fa-5x"></i><br />
-                                Get Extra 10 Minute Break <br>
-                                35 Point
-                            </button>
-                        </form>
-                    </p>
-                </div>
-                <div class="col">
-                    <p>
-                        <form asp-action="UsePoint" asp-controller="Student" asp-route-id="@Model.Id" method="post">
-                            <button type="submit" asp-action="UsePoint" asp-controller="Student" asp-route-id="@Model.Id" class="btn btn-primary" value="30" name="point">
-                                <i class="fa fa-user fa-5x"></i><br />
-                                Anything from Treasure Box <br>
-                                30 Point
-                            </button>
-                        </form>
-                    </p>
-                </div>
+
 
             </div>
-
-
-        </div>
+        }
     </div>
 
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
