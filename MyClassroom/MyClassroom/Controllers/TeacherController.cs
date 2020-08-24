@@ -38,11 +38,12 @@ namespace MyClassroom.Controllers
             return View(viewmodel);
         }
 
-        public ActionResult TeacherChat()
+        public ActionResult TeacherChat(int id)
         {
             TeacherStudenViewModel viewmodel = new TeacherStudenViewModel();
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             viewmodel.Teacher = _context.Teachers.Where(t => t.IdentityUserId == userId).FirstOrDefault();
+            viewmodel.Student = _context.Students.Where(s => s.Id == id).FirstOrDefault();
             
 
             if (viewmodel.Student == null)

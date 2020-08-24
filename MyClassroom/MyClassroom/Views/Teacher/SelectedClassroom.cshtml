@@ -37,16 +37,18 @@
     <div class="card-header">
         <h3 style="text-align:center">@Model.Classroom.Name</h3>
         @*Button trigger modal*@
-        <div class="containeer single-line" id="btn" style="text-align:center">
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addStudentModal">Add Student</button>
-            <form asp-action="ResetAllPoints" asp-controller="Teacher" asp-route-id="@Model.Classroom.Id" method="post">
-                <button type="submit" class="btn btn-primary" data-toggle="modal">Reset All Points</button>
-            </form>
-            <form asp-action="CreateHomework" asp-controller="Teacher" asp-route-id="@Model.Classroom.Id" method="post">
-                <buttaon type="button" class="btn btn-primary" data-toggle="modal" data-target="#createHomeworkModal">Assign Homework</buttaon>
-            </form>
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#attendanceModal">Attendance</button>
-        </div>
+    <div class="containeer single-line" id="btn" style="text-align:center">
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addStudentModal">Add Student</button>
+        <form asp-action="ResetAllPoints" asp-controller="Teacher" asp-route-id="@Model.Classroom.Id" method="post">
+            <button type="submit" class="btn btn-primary" data-toggle="modal">Reset All Points</button>
+        </form>
+        <form asp-action="CreateHomework" asp-controller="Teacher" asp-route-id="@Model.Classroom.Id" method="post">
+            <buttaon type="button" class="btn btn-primary" data-toggle="modal" data-target="#createHomeworkModal">Assign Homework</buttaon>
+        </form>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#attendanceModal">Attendance</button>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#playMusic">Play Music</button>
+
+    </div>
     </div>
     <div class="card-body">
         <blockquote class="blockquote mb-0">
@@ -140,13 +142,14 @@
                         <tbody>
                             @foreach (var student in Model.AllStudents)
                             {
-                                <tr style="cursor:pointer">
-                                    <th scope="row">
-                                        <input type="checkbox" name="selectedStudent" value="@student.Id" />
-                                    </th>
-                                    <td>@student.FirstName</td>
-                                    <td>@student.LastName</td>
-                                </tr>
+                            <tr style="cursor:pointer">
+                                <th scope="row">
+                                    <input type="checkbox" name="selectedStudent" value="@student.Id" />
+                                </th>
+                                <td>@student.FirstName</td>
+                                <td>@student.LastName</td>
+
+                            </tr>
                             }
                         </tbody>
                     </table>
@@ -231,9 +234,28 @@
     </div>
 }
 
-<div class="containeer" id="musicPlayer">
 
-<iframe src="https://open.spotify.com/embed/playlist/37i9dQZF1DX9sIqqvKsjG8" width="300" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+<div class="modal" tabindex="-1" role="dialog"  id="playMusic" aria-labelledby="playMusic" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"  id="playMusic">Play Music</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+            <iframe src="https://open.spotify.com/embed/playlist/37i9dQZF1DX9sIqqvKsjG8" width="465" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="containeer" id="musicPlayer">
 </div>
 
 

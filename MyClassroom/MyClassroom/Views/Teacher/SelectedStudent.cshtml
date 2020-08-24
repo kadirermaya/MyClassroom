@@ -41,7 +41,7 @@
             </form>
 
             <form asp-action="TeacherChat" method="post" enctype="multipart/form-data" asp-controller="Teacher">
-                <button type="submit" class="btn btn-primary" asp-action="TeacherChat" asp-route-id="@Model.Classroom.Id">Send Message to Parent</button>
+                <button type="submit" class="btn btn-primary" asp-action="TeacherChat" asp-route-id="@Model.Student.Id">Send Message to Parent</button>
             </form>
 
             <form asp-action="AddDailyNote" asp-controller="Teacher" asp-route-id="@Model.Student.Id" method="post">
